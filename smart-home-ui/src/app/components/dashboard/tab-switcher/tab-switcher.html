@@ -1,0 +1,4 @@
+@for (tab of tabs(); track $index) {
+  <button (click)="selectTab($index)">{{ tab.title }}</button>
+}
+<app-card-list [cards]="cards()"></app-card-list>

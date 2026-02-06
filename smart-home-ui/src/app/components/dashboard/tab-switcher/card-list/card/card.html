@@ -1,0 +1,9 @@
+<h3>{{ card()?.title }}</h3>
+@for (item of card()?.items; track $index) {
+  @if (item.type === 'sensor') {
+    <app-sensor [item]="item"></app-sensor>
+  }
+  @if (item.type === 'device') {
+    <app-device [item]="item"></app-device>
+  }
+}
