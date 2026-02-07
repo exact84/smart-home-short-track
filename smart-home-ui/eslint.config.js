@@ -16,6 +16,7 @@ module.exports = defineConfig([
     ],
     processor: angular.processInlineTemplates,
     rules: {
+      '@typescript-eslint/no-explicit-any': 'error',
       'unicorn/consistent-function-scoping': 'off',
       '@angular-eslint/directive-selector': [
         'error',
