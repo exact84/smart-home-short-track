@@ -1,1 +1,23 @@
-<p>Sensor: {{ item()?.label }}</p>
+@switch (layout()) {
+  @case (cardLayout.Horizontal) {
+    <div>{{ item()?.label }}</div>
+    <mat-icon class="icon-vertical">{{ item()?.icon }}</mat-icon>
+    <div>{{ item()?.value?.amount }}{{ item()?.value?.unit }}</div>
+  }
+
+  @case (cardLayout.Vertical) {
+    <div class="vertical">
+      <mat-icon class="icon">{{ item()?.icon }}</mat-icon>
+      <div class="label">{{ item()?.label }}</div>
+      <div>{{ item()?.value?.amount }}{{ item()?.value?.unit }}</div>
+    </div>
+  }
+
+  @case (cardLayout.SingleDevice) {
+    <div class="single-device">
+      <mat-icon class="icon">{{ item()?.icon }}</mat-icon>
+      <div class="label">{{ item()?.label }}</div>
+      <div>{{ item()?.value?.amount }}{{ item()?.value?.unit }}</div>
+    </div>
+  }
+}

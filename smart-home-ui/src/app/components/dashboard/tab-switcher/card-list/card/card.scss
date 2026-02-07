@@ -2,7 +2,36 @@
   display: flex;
   flex-direction: column;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px;
+  border-color: var(--border-color);
+  background-color: var(--fg-color);
   padding: 10px;
   margin: 10px;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+  // height: fit-content;
+  padding-bottom: 6px;
+}
+
+.single-device {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
