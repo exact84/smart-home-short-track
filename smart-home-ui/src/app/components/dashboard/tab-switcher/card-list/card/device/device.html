@@ -3,7 +3,7 @@
     item()?.icon
   }}</mat-icon>
   <div class="label">{{ item()?.label }}</div>
-  <mat-slide-toggle (change)="toggleDevice()"></mat-slide-toggle>
+  <mat-slide-toggle [checked]="isActive()" (change)="toggleDevice()"></mat-slide-toggle>
 } @else {
   <div class="label">{{ item()?.label }}</div>
   <mat-icon
