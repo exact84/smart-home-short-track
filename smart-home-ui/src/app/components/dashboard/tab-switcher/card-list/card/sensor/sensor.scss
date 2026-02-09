@@ -31,5 +31,16 @@
 
 .label {
   width: 100%;
-  // margin-left: 16px;
+}
+
+.value {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vertical .value {
+  width: 100%;
+  text-align: right;
 }

@@ -8,6 +8,7 @@
 :root {
   --icons-color: #4173a8;
   --border-color: dimgray;
+  --bg-color: #163036;
   --fg-color: #282828;
   --toggle-color: rgb(0, 162, 255);
   --icons-active-color: yellow;
@@ -72,4 +73,8 @@ body {
     system-ui,
     -apple-system,
     sans-serif;
+}
+
+.highlight {
+  outline: 2px solid red;
 }
