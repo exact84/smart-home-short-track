@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { Header } from './header/header';
 import { Menu } from './menu/menu';
 import { Footer } from './footer/footer';
@@ -9,4 +9,6 @@ import { Footer } from './footer/footer';
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
 })
-export class Sidebar {}
+export class Sidebar {
+  readonly toggleFn = output<void>();
+}

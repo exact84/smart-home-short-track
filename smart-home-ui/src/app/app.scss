@@ -3,3 +3,26 @@
   height: 100vh;
   overflow: hidden;
 }
+
+.toggle-btn {
+  display: flex;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background-color: var(--bg-color);
+  border-color: var(--border-color);
+  border-radius: 4px;
+  align-items: center;
+  padding: 2px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(37, 37, 37);
+    border: solid 1px;
+  }
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -6,5 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatIconModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
+  host: {
+    '(click)': 'toggleFn.emit()',
+  },
 })
-export class Header {}
+export class Header {
+  readonly toggleFn = output<void>();
+}

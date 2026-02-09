@@ -19,6 +19,5 @@ export class TabSwitcher {
 
   selectTab(tabIndex: number) {
     this.currentTabId.set(tabIndex);
-    console.log('Tab-switcher', this.currentTabId(), this.tabs()![this.currentTabId()]);
   }
 }

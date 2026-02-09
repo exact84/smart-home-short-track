@@ -1,5 +1,11 @@
 <main class="main">
-  <app-sidebar></app-sidebar>
+  @if (showSidebar()) {
+    <app-sidebar (toggleFn)="toggleSidebar()"></app-sidebar>
+  } @else {
+    <button mat-icon-button class="toggle-btn" (click)="toggleSidebar()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  }
   <app-dashboard></app-dashboard>
   <router-outlet></router-outlet>
 </main>

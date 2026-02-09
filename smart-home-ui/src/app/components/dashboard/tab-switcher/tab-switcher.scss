@@ -25,3 +25,9 @@
     border-bottom: 2px solid white;
   }
 }
+
+@media (max-width: 768px) {
+  .tabs-container {
+    padding-left: 40px;
+  }
+}

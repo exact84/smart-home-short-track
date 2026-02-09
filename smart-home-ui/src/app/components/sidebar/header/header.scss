@@ -6,3 +6,11 @@
   padding: 10px;
   gap: 10px;
 }
+
+@media ((hover: hover) and (max-width: 768px)) {
+  :host:hover {
+    background-color: var(--bg-header-color);
+    color: var(--toggle-color);
+    cursor: pointer;
+  }
+}
