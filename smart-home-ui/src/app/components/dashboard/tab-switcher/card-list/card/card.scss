@@ -4,9 +4,11 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   border-color: var(--border-color);
-  background-color: var(--fg-color);
-  padding: 10px;
-  margin: 10px;
+  background-color: var(--bg-color);
+  padding: 14px;
+  margin: 2px;
+  width: fit-content;
+  min-width: 250px;
 }
 
 .card-header {
@@ -14,7 +16,6 @@
   flex-direction: row;
   gap: 10px;
   justify-content: space-between;
-  // height: fit-content;
   padding-bottom: 6px;
 }
 

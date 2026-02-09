@@ -1,4 +1,6 @@
-@for (tab of tabs(); track $index) {
-  <button (click)="selectTab($index)">{{ tab.title }}</button>
-}
+<div class="tabs-container">
+  @for (tab of tabs(); track $index) {
+    <button class="tab" (click)="selectTab($index)">{{ tab.title }}</button>
+  }
+</div>
 <app-card-list [cards]="cards()"></app-card-list>

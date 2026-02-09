@@ -14,7 +14,6 @@ export class TabSwitcher {
 
   protected cards = computed<CardInfo[] | undefined>(() => {
     const tabs = this.tabs();
-    // console.log('Tab-switcher', this.tabs());
     return tabs && tabs.length > 0 ? tabs[this.currentTabId()].cards : undefined;
   });
 
