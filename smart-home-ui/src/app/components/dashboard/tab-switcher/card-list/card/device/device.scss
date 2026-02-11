@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+  width: 100%;
+}
+
+.icon {
+  padding-right: 16px;
+  width: 20%;
+}
+
+.inactive {
+  color: var(--icons-color);
+}
+
+.active {
+  color: var(--icons-active-color);
+}
+
+.label {
+  width: 100%;
+}
