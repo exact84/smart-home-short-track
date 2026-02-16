@@ -35,8 +35,8 @@ export const routes: Routes = [
       },
     ],
   },
-  // {
-  // path: '**',
-  // loadComponent: () => import('./components/404/404').then((m) => m.404),
-  // },
+  {
+    path: '**',
+    loadComponent: () => import('./components/not-found/not-found').then((m) => m.NotFound),
+  },
 ];
