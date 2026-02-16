@@ -2,11 +2,24 @@
   <h1 class="title">Login</h1>
   <label for="username"
     >Username:
-    <input formControlName="username" class="login-input" type="text" placeholder="Username" />
+    <input
+      id="username"
+      autocomplete="username"
+      formControlName="userName"
+      class="login-input"
+      type="text"
+      placeholder="Username"
+    />
   </label>
   <label for="password"
     >Password:
-    <input formControlName="password" class="login-input" type="password" placeholder="Password" />
+    <input
+      id="password"
+      formControlName="password"
+      class="login-input"
+      type="password"
+      placeholder="Password"
+    />
   </label>
   <div class="button-container">
     @if (loginError() === 401) {

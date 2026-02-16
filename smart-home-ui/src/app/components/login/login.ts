@@ -4,7 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 interface LoginFormData {
-  username: FormControl<string>;
+  userName: FormControl<string>;
   password: FormControl<string>;
 }
 
@@ -20,7 +20,7 @@ export class Login {
   private router = inject(Router);
 
   form = new FormGroup<LoginFormData>({
-    username: new FormControl('', {
+    userName: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required],
     }),

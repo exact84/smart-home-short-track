@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { DashboardData, Tab } from '../models';
+import { catchError, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,9 +12,23 @@ export class DataStoreService {
   readonly tabs = this._tabs.asReadonly();
 
   constructor() {
-    this.http.get<DashboardData>('api/mock-data.json').subscribe((data) => {
-      this._tabs.set(data.tabs);
-    });
+    this.http
+      .get<DashboardData>('/dashboards/electricity')
+      .pipe(
+        tap((response: DashboardData) => {
+          console.log(response);
+          this._tabs.set(response.tabs);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.log(error);
+          return throwError(() => error);
+        }),
+      )
+      .subscribe({
+        error: (error) => {
+          console.error('Subscription error:', error);
+        },
+      });
   }
 
   public toggleDevice(cardId: string, deviceLabel: string, state?: boolean) {
