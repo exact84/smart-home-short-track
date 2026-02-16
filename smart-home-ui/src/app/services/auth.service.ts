@@ -3,6 +3,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { TokenService } from './token.service';
 import { catchError, switchMap, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private http = inject(HttpClient);
   private tokenService = inject(TokenService);
-  public currentUser = signal<object | undefined>(undefined);
+  public currentUser = signal<User | undefined>(undefined);
   public loading = signal(true);
   private router = inject(Router);
   public isLoggedIn = computed(() => !!this.currentUser());
@@ -27,16 +28,21 @@ export class AuthService {
 
   public loadUserData(token: string) {
     this.loading.set(true);
-    return this.http.get('/user/profile', { headers: { Authorization: `Bearer ${token}` } }).pipe(
-      tap((response) => this.currentUser.set(response)),
-      catchError((error) => {
-        console.log(error);
-        this.tokenService.deleteToken();
-        this.loading.set(false);
-        return throwError(() => error);
-      }),
-      tap(() => this.loading.set(false)),
-    );
+    return this.http
+      .get<User>('/user/profile', { headers: { Authorization: `Bearer ${token}` } })
+      .pipe(
+        tap((response) => {
+          console.log('response USER:', response);
+          return this.currentUser.set(response);
+        }),
+        catchError((error) => {
+          console.log(error);
+          this.tokenService.deleteToken();
+          this.loading.set(false);
+          return throwError(() => error);
+        }),
+        tap(() => this.loading.set(false)),
+      );
   }
 
   public logout() {

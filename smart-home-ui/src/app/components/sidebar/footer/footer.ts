@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-footer',
@@ -7,4 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './footer.html',
   styleUrl: './footer.scss',
 })
-export class Footer {}
+export class Footer {
+  public authService = inject(AuthService);
+  onLogout() {
+    this.authService.logout();
+  }
+}

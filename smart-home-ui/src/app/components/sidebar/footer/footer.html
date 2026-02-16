@@ -1,5 +1,13 @@
-<div>
+<button class="item">
+  <span class="letters"> {{ authService.currentUser()?.initials }}</span>
+  <span>{{ authService.currentUser()?.fullName }}</span>
+</button>
+<button class="item" title="Logout" (click)="onLogout()">
+  <span><mat-icon>logout</mat-icon></span
+  ><span>Logout</span>
+</button>
+<button class="item">
   <a href="https://rs.school/courses/angular" target="_blank">
     <span class="letters">RS</span><span>RS School. Angular</span>
   </a>
-</div>
+</button>
