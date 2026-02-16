@@ -2,7 +2,7 @@ import { Component, input, inject, computed } from '@angular/core';
 import { CardLayout, DeviceItem } from '../../../../../../models';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { DataStore } from '../../../../../../services/data-store';
+import { DataStoreService } from '../../../../../../services/data-store.service';
 
 @Component({
   selector: 'app-device',
@@ -11,7 +11,7 @@ import { DataStore } from '../../../../../../services/data-store';
   styleUrl: './device.scss',
 })
 export class Device {
-  private dataStore = inject(DataStore);
+  private dataStore = inject(DataStoreService);
   public item = input<DeviceItem>();
   public cardId = input<string>();
   public layout = input<CardLayout>();

@@ -18,6 +18,7 @@ module.exports = defineConfig([
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
       'unicorn/consistent-function-scoping': 'off',
+      'unicorn/no-useless-undefined': 'off',
       '@angular-eslint/directive-selector': [
         'error',
         {

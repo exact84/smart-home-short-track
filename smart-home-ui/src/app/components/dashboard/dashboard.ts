@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { TabSwitcher } from './tab-switcher/tab-switcher';
 
-import { DataStore } from '../../services/data-store';
+import { DataStoreService } from '../../services/data-store.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,5 +10,5 @@ import { DataStore } from '../../services/data-store';
   styleUrl: './dashboard.scss',
 })
 export class Dashboard {
-  tabs = inject(DataStore).tabs;
+  tabs = inject(DataStoreService).tabs;
 }

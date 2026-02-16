@@ -5,7 +5,7 @@ import { DashboardData, Tab } from '../models';
 @Injectable({
   providedIn: 'root',
 })
-export class DataStore {
+export class DataStoreService {
   http = inject(HttpClient);
   private readonly _tabs = signal<Tab[]>([]);
   readonly tabs = this._tabs.asReadonly();

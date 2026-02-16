@@ -3,7 +3,7 @@ import { CardInfo, CardLayout } from '../../../../../models';
 import { Device } from './device/device';
 import { Sensor } from './sensor/sensor';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { DataStore } from '../../../../../services/data-store';
+import { DataStoreService } from '../../../../../services/data-store.service';
 
 @Component({
   selector: 'app-card',
@@ -22,7 +22,7 @@ export class Card {
   );
   public hasToggle = computed(() => this.devices().length > 1);
   readonly isMasterToggleOn = computed(() => this.devices().some((device) => device.state));
-  dataStore = inject(DataStore);
+  dataStore = inject(DataStoreService);
 
   public status() {
     return this.devices()[0]?.state ? 'On' : 'Off';

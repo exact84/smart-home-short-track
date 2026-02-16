@@ -1,1 +1,20 @@
-<p>login works!</p>
+<form class="login-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <h1 class="title">Login</h1>
+  <label for="username"
+    >Username:
+    <input formControlName="username" class="login-input" type="text" placeholder="Username" />
+  </label>
+  <label for="password"
+    >Password:
+    <input formControlName="password" class="login-input" type="password" placeholder="Password" />
+  </label>
+  <div class="button-container">
+    @if (loginError() === 401) {
+      <div class="error">Invalid username or password.</div>
+    }
+    @if (loginError() !== 401 && loginError() !== undefined) {
+      <div class="error">Unknown error occurred. Please try again later.</div>
+    }
+    <button class="button" type="submit">Login</button>
+  </div>
+</form>
