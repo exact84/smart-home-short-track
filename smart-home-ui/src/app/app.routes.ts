@@ -20,6 +20,18 @@ export const routes: Routes = [
         path: 'dashboard',
         loadComponent: () => import('./components/dashboard/dashboard').then((m) => m.Dashboard),
         canActivate: [authGuard],
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./components/dashboard/dashboard').then((m) => m.Dashboard),
+          },
+          {
+            path: ':dashboardId',
+            loadComponent: () =>
+              import('./components/dashboard/dashboard').then((m) => m.Dashboard),
+          },
+        ],
       },
     ],
   },

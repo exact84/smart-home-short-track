@@ -1,7 +1,6 @@
 <main class="main">
-  @if (showSidebar()) {
-    <app-sidebar (toggleFn)="toggleSidebar()"></app-sidebar>
-  } @else {
+  <app-sidebar [class.hidden]="!showSidebar()" (toggleFn)="toggleSidebar()"></app-sidebar>
+  @if (!showSidebar()) {
     <button mat-icon-button class="toggle-btn" (click)="toggleSidebar()">
       <mat-icon>menu</mat-icon>
     </button>

@@ -1,8 +1,6 @@
-<div class="menuitem">
-  <mat-icon>info</mat-icon>
-  <span>Overview</span>
-</div>
-<div class="menuitem">
-  <mat-icon>info</mat-icon>
-  <span>About</span>
-</div>
+@for (dashboard of dashboardList(); track dashboard.id) {
+  <button class="menuitem" (click)="onDashboardClick(dashboard.id)">
+    <mat-icon>{{ dashboard.icon }}</mat-icon>
+    <span>{{ dashboard.title }}</span>
+  </button>
+}
