@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, untracked } from '@angular/core';
 import { TabSwitcher } from './tab-switcher/tab-switcher';
 
 import { DataStoreService } from '../../services/data-store.service';
@@ -17,24 +17,19 @@ export class Dashboard {
   tabs = this.dataStore.tabs;
   private route = inject(ActivatedRoute);
   readonly dashboardId = toSignal(
-    this.route.firstChild!.paramMap.pipe(
-      map((parameters) => {
-        console.log('dashboardId from signal:', parameters.get('dashboardId'));
-        return parameters.get('dashboardId');
-      }),
-    ),
+    this.route.paramMap.pipe(map((parameters) => parameters.get('dashboardId'))),
   );
 
+  readonly tabId = toSignal(this.route.paramMap.pipe(map((parameters) => parameters.get('tabId'))));
+
   constructor() {
-    if (!this.dashboardId()) {
-      return;
-    }
-    this.dataStore.getDashboardData(this.dashboardId()!);
-    // effect(() => {
-    //   const id = this.dashboardId();
-    //   if (id) {
-    //     console.log(`Сменился роут, dashboardId: ${id}`);
-    //   }
-    // });
+    effect(() => {
+      if (this.dataStore.dashboardList().length === 0 && !untracked(() => this.dashboardId())) {
+        return;
+      }
+
+      const id = untracked(() => this.dashboardId()) || this.dataStore.dashboardList()[0].id;
+      if (id) this.dataStore.getDashboardData(id, this.tabId()!);
+    });
   }
 }

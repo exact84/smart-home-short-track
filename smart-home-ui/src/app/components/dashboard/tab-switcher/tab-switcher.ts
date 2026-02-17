@@ -1,4 +1,4 @@
-import { Component, input, computed, inject } from '@angular/core';
+import { Component, input, computed, inject, untracked } from '@angular/core';
 import { CardList } from './card-list/card-list';
 import { CardInfo, Tab } from '../../../models';
 import { Router } from '@angular/router';
@@ -14,23 +14,24 @@ export class TabSwitcher {
   private router = inject(Router);
   private dataStore = inject(DataStoreService);
   tabs = input<Tab[]>();
-  private currentTabId = computed(() => this.dataStore.currentTabId());
+  private currentTabIndex = computed(() => this.dataStore.currentTabIndex());
 
   protected cards = computed<CardInfo[] | undefined>(() => {
-    console.log(
-      'FROM CARDS, curentDashboardId:',
-      this.dataStore.currentDashboardId(),
-      'selectTab:',
-      'currentTabId:',
-      this.currentTabId(),
-    );
     const tabs = this.tabs();
-    return tabs && tabs.length > 0 ? tabs[this.currentTabId()].cards : undefined;
+    return tabs && tabs.length > 0
+      ? untracked(() => tabs[this.currentTabIndex()].cards)
+      : undefined;
   });
 
   selectTab(tabIndex: number) {
-    this.dataStore.currentTabId.set(tabIndex);
-    console.log('curentDashboardId:', this.dataStore.currentDashboardId(), 'selectTab:', tabIndex);
-    // this.router.navigate(['dashboard', this.tabs()![tabIndex].id]);
+    if (tabIndex === this.currentTabIndex()) return;
+    this.dataStore.currentTabIndex.set(tabIndex);
+    this.dataStore.currentTabId.set(this.tabs()![tabIndex].id);
+    this.router.navigate(
+      [`/dashboard/${this.dataStore.currentDashboardId()}/${this.dataStore.currentTabId()}`],
+      {
+        replaceUrl: true,
+      },
+    );
   }
 }

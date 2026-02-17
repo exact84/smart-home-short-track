@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class TokenService {
   public saveToken(token: string) {
-    console.log('token-service:', token);
     localStorage.setItem('token smart-home-exact84', token);
   }
 

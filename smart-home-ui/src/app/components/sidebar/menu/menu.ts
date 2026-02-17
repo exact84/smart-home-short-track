@@ -15,11 +15,12 @@ export class Menu {
   public dashboardList = this.dataStore.dashboardList;
 
   constructor() {
-    console.log('constructor');
     this.dataStore.getDashboardList();
   }
   onDashboardClick(dashboardId: string) {
+    if (dashboardId === this.dataStore.currentDashboardId()) return;
     this.dataStore.getDashboardData(dashboardId);
+    this.dataStore.currentTabIndex.set(0);
     this.router.navigate(['dashboard', dashboardId]);
   }
 }

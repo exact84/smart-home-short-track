@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: row;
   padding: 6px 6px 6px 6px;
-  // border: solid 1px var(--bg-color);
+  border-radius: 8px;
   background-color: var(--bg-color);
   border: none;
   width: 100%;
@@ -18,10 +18,12 @@
   box-sizing: border-box;
 }
 
-.item:hover {
-  background-color: rgb(0, 65, 65);
-  color: rgb(84, 207, 255);
-  cursor: pointer;
+@media (hover: hover) {
+  .item:hover {
+    background-color: var(--bg-header-color);
+    color: var(--toggle-color);
+    cursor: pointer;
+  }
 }
 
 .letters {

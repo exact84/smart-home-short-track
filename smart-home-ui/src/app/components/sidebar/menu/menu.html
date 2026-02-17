@@ -3,4 +3,8 @@
     <mat-icon>{{ dashboard.icon }}</mat-icon>
     <span>{{ dashboard.title }}</span>
   </button>
+} @empty {
+  <div class="empty">
+    You don’t have any dashboards yet. They’ll appear here as soon as you create them
+  </div>
 }

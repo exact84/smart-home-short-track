@@ -32,7 +32,6 @@ export class Login {
 
   onSubmit() {
     const loginData = this.form.getRawValue();
-    console.log(loginData);
     this.authService.login(loginData).subscribe({
       next: () => this.router.navigate(['dashboard']),
       error: (error) => this.loginError.set(error.status),

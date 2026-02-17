@@ -75,6 +75,13 @@ body {
     sans-serif;
 }
 
+.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px;
+}
+
 .highlight {
   outline: 2px solid red;
 }

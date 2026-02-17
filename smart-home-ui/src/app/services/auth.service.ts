@@ -19,7 +19,7 @@ export class AuthService {
   public login(credentials: { userName: string; password: string }) {
     const { userName, password } = credentials;
     const body = { userName, password };
-    return this.http.post<{ token: string }>('/user/login', body).pipe(
+    return this.http.post<{ token: string }>('user/login', body).pipe(
       tap((response) => this.tokenService.saveToken(response.token)),
       switchMap((response) => this.loadUserData(response.token)),
       catchError((error) => throwError(() => error)),
@@ -29,10 +29,9 @@ export class AuthService {
   public loadUserData(token: string) {
     this.loading.set(true);
     return this.http
-      .get<User>('/user/profile', { headers: { Authorization: `Bearer ${token}` } })
+      .get<User>('user/profile', { headers: { Authorization: `Bearer ${token}` } })
       .pipe(
         tap((response) => {
-          console.log('response USER:', response);
           return this.currentUser.set(response);
         }),
         catchError((error) => {

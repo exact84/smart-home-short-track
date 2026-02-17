@@ -1,45 +1,27 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { DashboardData, Tab } from '../models';
 import { DashboardList } from '../models/dashboard-list.model';
+import { catchError, EMPTY, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataStoreService {
   http = inject(HttpClient);
+  router = inject(Router);
   private readonly _tabs = signal<Tab[]>([]);
   readonly tabs = this._tabs.asReadonly();
   readonly dashboardList = signal<DashboardList[]>([]);
   public currentDashboardId = signal<string | undefined>(undefined);
-  public currentTabId = signal(0);
-
-  constructor() {
-    // this.getDashboardList();
-    // this.dashboardList.set(this.getDashboardList());
-    // this.http
-    //   .get<DashboardData>('/dashboards/electricity')
-    //   .pipe(
-    //     tap((response: DashboardData) => {
-    //       console.log(response);
-    //       this._tabs.set(response.tabs);
-    //     }),
-    //     catchError((error: HttpErrorResponse) => {
-    //       console.log(error);
-    //       return throwError(() => error);
-    //     }),
-    //   )
-    //   .subscribe({
-    //     error: (error) => {
-    //       console.error('Subscription error:', error);
-    //     },
-    //   });
-  }
+  public currentTabId = signal<string | undefined>(undefined);
+  public currentTabIndex = signal(0);
 
   getDashboardList() {
     this.http.get<DashboardList[]>(`dashboards`).subscribe((response) => {
       this.dashboardList.set(response);
-      this.currentDashboardId.set(response[0].id);
+      if (response.length > 0) this.currentDashboardId.set(response[0].id);
     });
   }
 
@@ -47,14 +29,36 @@ export class DataStoreService {
     return this.http.post<DashboardList>(`dashboards`, dashboard);
   }
 
-  getDashboardData(dashboardId: string) {
-    this.currentDashboardId.set(dashboardId);
-    this.currentTabId.set(0);
-    console.log(`getDashboardData: dashboards/${dashboardId}`);
+  loadDashboard(dashboardId: string) {
+    return this.http.get<DashboardData>(`dashboards/${dashboardId}`);
+  }
 
-    this.http.get<DashboardData>(`dashboards/${dashboardId}`).subscribe((response) => {
-      this._tabs.set(response.tabs);
-    });
+  getDashboardData(dashboardId: string, tabId?: string) {
+    this.currentDashboardId.set(dashboardId);
+
+    this.http
+      .get<DashboardData>(`dashboards/${dashboardId}`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            this.getDashboardList();
+            this.router.navigate(['/dashboard', this.dashboardList()[0].id]);
+            return EMPTY;
+          }
+          return throwError(() => error);
+        }),
+      )
+      .subscribe((response) => {
+        const exists = response.tabs.some((tab) => tab.id === tabId);
+
+        if (!exists)
+          this.router.navigate([`/dashboard/${dashboardId}/${response.tabs[0].id}`], {
+            replaceUrl: true,
+          });
+        this._tabs.set(response.tabs);
+        this.currentTabId.set(exists ? tabId : response.tabs[0].id);
+        this.currentTabIndex.set(response.tabs.findIndex((tab) => tab.id === this.currentTabId()));
+      });
   }
 
   public toggleDevice(cardId: string, deviceLabel: string, state?: boolean) {

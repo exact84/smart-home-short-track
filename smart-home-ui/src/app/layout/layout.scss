@@ -20,13 +20,15 @@
   align-items: center;
   padding: 2px;
 
-  &:hover {
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+@media (hover: hover) {
+  .toggle-btn:hover {
     cursor: pointer;
     background-color: rgb(37, 37, 37);
     border: solid 1px;
-  }
-
-  @media (min-width: 768px) {
-    display: none;
   }
 }

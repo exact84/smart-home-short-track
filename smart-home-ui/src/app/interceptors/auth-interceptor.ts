@@ -10,28 +10,11 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
   const router = inject(Router);
   const token = tokenStorage.getToken();
 
-  // console.log('token in interceptor', token);
-
-  // console.log('before interceptor', request.url);
-
-  // if (!request.url.startsWith('http')) {
-  //   if (request.url.startsWith('/api')) {
-  //     request = request.clone({
-  //       url: BASE_API_URL + request.url,
-  //     });
-  //   }
-  //   request = request.clone({
-  //     url: BASE_API_URL + request.url,
-  //   });
-  // }
-
   if (!request.url.startsWith('http') && !request.url.startsWith('api')) {
     request = request.clone({
-      url: `${BASE_API_URL}${request.url.startsWith('/') ? '' : '/'}${request.url}`,
+      url: `${BASE_API_URL}${request.url.startsWith('/') ? 'api/' : '/api/'}${request.url}`,
     });
   }
-
-  // console.log('after interceptor', request.url);
 
   if (token) {
     request = request.clone({

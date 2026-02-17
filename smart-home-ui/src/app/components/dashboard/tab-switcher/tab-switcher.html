@@ -1,6 +1,15 @@
 <div class="tabs-container">
   @for (tab of tabs(); track $index) {
     <button class="tab" (click)="selectTab($index)">{{ tab.title }}</button>
+  } @empty {
+    @if (!tabs()) {
+      <div class="empty">
+        You don’t have any tabs yet. They’ll appear here as soon as you create them
+      </div>
+    } @else {
+      <div class="empty">Choose the dashboard you want to view</div>
+    }
   }
 </div>
+
 <app-card-list [cards]="cards()"></app-card-list>
