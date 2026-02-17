@@ -1,13 +1,11 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, EMPTY, throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { TokenService } from '../services/token.service';
 import { BASE_API_URL } from '../constants/base-url';
 
 export const authInterceptor: HttpInterceptorFn = (request, next) => {
   const tokenStorage = inject(TokenService);
-  const router = inject(Router);
   const token = tokenStorage.getToken();
 
   if (!request.url.startsWith('http') && !request.url.startsWith('api')) {
@@ -26,8 +24,6 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
     catchError((error) => {
       if (error.status === 401) {
         tokenStorage.deleteToken();
-        router.navigate(['login']);
-        return EMPTY;
       }
       return throwError(() => error);
     }),

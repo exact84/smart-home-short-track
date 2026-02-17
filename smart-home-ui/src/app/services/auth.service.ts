@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { TokenService } from './token.service';
-import { catchError, switchMap, tap, throwError } from 'rxjs';
+import { catchError, finalize, switchMap, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '../models/user.model';
 
@@ -32,15 +32,14 @@ export class AuthService {
       .get<User>('user/profile', { headers: { Authorization: `Bearer ${token}` } })
       .pipe(
         tap((response) => {
-          return this.currentUser.set(response);
+          this.currentUser.set(response);
         }),
         catchError((error) => {
           console.log(error);
           this.tokenService.deleteToken();
-          this.loading.set(false);
           return throwError(() => error);
         }),
-        tap(() => this.loading.set(false)),
+        finalize(() => this.loading.set(false)),
       );
   }
 
