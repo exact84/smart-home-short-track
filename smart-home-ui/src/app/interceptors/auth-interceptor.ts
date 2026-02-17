@@ -1,0 +1,31 @@
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
+import { TokenService } from '../services/token.service';
+import { BASE_API_URL } from '../constants/base-url';
+
+export const authInterceptor: HttpInterceptorFn = (request, next) => {
+  const tokenStorage = inject(TokenService);
+  const token = tokenStorage.getToken();
+
+  if (!request.url.startsWith('http') && !request.url.startsWith('api')) {
+    request = request.clone({
+      url: `${BASE_API_URL}${request.url.startsWith('/') ? 'api/' : '/api/'}${request.url}`,
+    });
+  }
+
+  if (token) {
+    request = request.clone({
+      headers: request.headers.set('Authorization', `Bearer ${token}`),
+    });
+  }
+
+  return next(request).pipe(
+    catchError((error) => {
+      if (error.status === 401) {
+        tokenStorage.deleteToken();
+      }
+      return throwError(() => error);
+    }),
+  );
+};

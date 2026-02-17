@@ -1,0 +1,47 @@
+<div class="card-header">
+  <h3 class="card-title">{{ card()?.title }}</h3>
+
+  @if (hasToggle()) {
+    <mat-slide-toggle [checked]="isMasterToggleOn()" (change)="toggleAll()"></mat-slide-toggle>
+  }
+</div>
+
+@switch (card()?.layout) {
+  @case (layouts.SingleDevice) {
+    <div class="single-device">
+      @for (item of card()?.items; track $index) {
+        @if (item.type === 'sensor') {
+          <app-sensor [item]="item" [layout]="card()?.layout"></app-sensor>
+        }
+        @if (item.type === 'device') {
+          <app-device [item]="item" [cardId]="card()?.id" [layout]="card()?.layout"></app-device>
+          <div>{{ status() }}</div>
+        }
+      }
+    </div>
+  }
+  @case (layouts.Horizontal) {
+    <div class="horizontal">
+      @for (item of card()?.items; track $index) {
+        @if (item.type === 'sensor') {
+          <app-sensor [item]="item" [layout]="card()?.layout"></app-sensor>
+        }
+        @if (item.type === 'device') {
+          <app-device [item]="item" [layout]="card()?.layout"></app-device>
+        }
+      }
+    </div>
+  }
+  @case (layouts.Vertical) {
+    <div class="vertical">
+      @for (item of card()?.items; track $index) {
+        @if (item.type === 'sensor') {
+          <app-sensor [item]="item" [layout]="card()?.layout"></app-sensor>
+        }
+        @if (item.type === 'device') {
+          <app-device [item]="item" [cardId]="card()?.id" [layout]="card()?.layout"></app-device>
+        }
+      }
+    </div>
+  }
+}

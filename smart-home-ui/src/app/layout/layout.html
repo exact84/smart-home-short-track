@@ -1,0 +1,9 @@
+<main class="main">
+  <app-sidebar [class.hidden]="!showSidebar()" (toggleFn)="toggleSidebar()"></app-sidebar>
+  @if (!showSidebar()) {
+    <button mat-icon-button class="toggle-btn" (click)="toggleSidebar()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  }
+  <router-outlet></router-outlet>
+</main>
