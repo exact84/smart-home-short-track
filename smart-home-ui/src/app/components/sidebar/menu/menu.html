@@ -1,10 +1,21 @@
-@for (dashboard of dashboardList(); track dashboard.id) {
-  <button class="menuitem" (click)="onDashboardClick(dashboard.id)">
-    <mat-icon>{{ dashboard.icon }}</mat-icon>
-    <span>{{ dashboard.title }}</span>
-  </button>
-} @empty {
-  <div class="empty">
-    You don’t have any dashboards yet. They’ll appear here as soon as you create them
+@if (loading$ | async) {
+  <div class="loading">
+    <p>Loading dashboards...</p>
+    <img src="/spinner.svg" alt="Loading..." />
   </div>
+} @else {
+  @if (error$ | async; as error) {
+    <p class="error">{{ error }}</p>
+  } @else {
+    @for (dashboard of dashboardList$ | async; track dashboard.id) {
+      <button class="menuitem" (click)="onDashboardClick(dashboard.id)">
+        <mat-icon>{{ dashboard.icon }}</mat-icon>
+        <span>{{ dashboard.title }}</span>
+      </button>
+    } @empty {
+      <div class="empty">
+        You don’t have any dashboards yet. They’ll appear here as soon as you create them
+      </div>
+    }
+  }
 }

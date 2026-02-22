@@ -18,11 +18,15 @@ export class DataStoreService {
   public currentTabId = signal<string | undefined>(undefined);
   public currentTabIndex = signal(0);
 
+  // getDashboardList() {
+  //   this.http.get<DashboardList[]>(`dashboards`).subscribe((response) => {
+  //     this.dashboardList.set(response);
+  //     if (response.length > 0) this.currentDashboardId.set(response[0].id);
+  //   });
+  // }
+
   getDashboardList() {
-    this.http.get<DashboardList[]>(`dashboards`).subscribe((response) => {
-      this.dashboardList.set(response);
-      if (response.length > 0) this.currentDashboardId.set(response[0].id);
-    });
+    return this.http.get<DashboardList[]>(`dashboards`);
   }
 
   createDashboard(dashboard: DashboardList) {
