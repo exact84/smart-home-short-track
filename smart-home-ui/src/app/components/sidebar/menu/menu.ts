@@ -1,10 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { loadDashboardList, selectDashboard } from '../../../store/dashboard.actions';
-import { selectDashboardList } from '../../../store/dashboard.selectors';
+import { selectDashboardList } from '../../../store/dashboard-list/dashboard.selectors';
 import { AsyncPipe } from '@angular/common';
+import { loadDashboardData } from '../../../store/dashboard-data/dashboard-data.actions';
+import { selectDashboardDataState } from '../../../store/dashboard-data/dashboard-data.selectors';
+import { Tab } from '../../../models';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map, filter } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -14,20 +18,32 @@ import { AsyncPipe } from '@angular/common';
 })
 export class Menu {
   router = inject(Router);
+  route = inject(ActivatedRoute);
   store = inject(Store);
   public dashboardList$ = this.store.select(selectDashboardList);
   public loading$ = this.store.select((state) => state.dashboardList.loading);
   public error$ = this.store.select((state) => state.dashboardList.error);
+  private tabs: Tab[] = [];
+  dashboardData = toSignal(this.store.select(selectDashboardDataState));
 
-  constructor() {
-    this.store.dispatch(loadDashboardList());
-  }
+  currentDashboardId = toSignal(
+    this.route.children[0].paramMap.pipe(
+      map((parameters) => parameters.get('dashboardId')),
+      filter((id) => id !== null),
+    ),
+  );
+
   onDashboardClick(dashboardId: string) {
-    console.log(dashboardId);
-    this.store.dispatch(selectDashboard({ dashboardId }));
-    // if (dashboardId === this.dataStore.currentDashboardId()) return;
-    // this.dataStore.getDashboardData(dashboardId);
-    // this.dataStore.currentTabIndex.set(0);
-    // this.router.navigate(['dashboard', dashboardId]);
+    if (dashboardId === this.currentDashboardId()) return;
+    console.log(dashboardId, this.currentDashboardId());
+
+    this.store.dispatch(loadDashboardData({ dashboardId }));
+
+    // const data = this.dashboardData();
+
+    // this.tabs = data?.tabs || [];
+    // if (this.tabs.length > 0) {
+    //   this.router.navigate(['dashboard', dashboardId, this.tabs[0]?.id]);
+    // }
   }
 }

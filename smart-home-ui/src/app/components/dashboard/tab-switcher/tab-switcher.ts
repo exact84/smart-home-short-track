@@ -1,8 +1,12 @@
-import { Component, input, computed, inject, untracked } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CardList } from './card-list/card-list';
-import { CardInfo, Tab } from '../../../models';
-import { Router } from '@angular/router';
-import { DataStoreService } from '../../../services/data-store.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectDashboardDataState } from '../../../store/dashboard-data/dashboard-data.selectors';
+import { map } from 'rxjs';
+import { CardInfo } from '../../../models';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { loadDashboardData } from '../../../store/dashboard-data/dashboard-data.actions';
 
 @Component({
   selector: 'app-tab-switcher',
@@ -10,28 +14,79 @@ import { DataStoreService } from '../../../services/data-store.service';
   templateUrl: './tab-switcher.html',
   styleUrl: './tab-switcher.scss',
 })
-export class TabSwitcher {
+export class TabSwitcher implements OnInit {
   private router = inject(Router);
-  private dataStore = inject(DataStoreService);
-  tabs = input<Tab[]>();
-  private currentTabIndex = computed(() => this.dataStore.currentTabIndex());
+  private route = inject(ActivatedRoute);
+  private store = inject(Store);
 
-  protected cards = computed<CardInfo[] | undefined>(() => {
+  currentTabIndex = computed(() => {
     const tabs = this.tabs();
-    return tabs && tabs.length > 0
-      ? untracked(() => tabs[this.currentTabIndex()].cards)
-      : undefined;
+    const id = this.tabId();
+    const index = tabs.findIndex((t) => t.id === id);
+    return Math.max(index, 0);
   });
+
+  dashboardId = toSignal(
+    this.route.paramMap.pipe(map((parameters) => parameters.get('dashboardId'))),
+  );
+
+  tabId = toSignal(
+    this.route.paramMap.pipe(
+      map((parameters) => {
+        return parameters.get('tabId');
+      }),
+    ),
+  );
+
+  dashboard = this.store.selectSignal(selectDashboardDataState);
+  tabs = computed(() => this.dashboard()?.tabs ?? []);
+
+  public cards = computed<CardInfo[]>(() => {
+    const tabs = this.tabs();
+    console.log('cards changed', this.currentTabIndex(), tabs[this.currentTabIndex()]);
+    const tab = tabs[this.currentTabIndex()];
+    return tab?.cards ?? [];
+  });
+
+  loading = computed(() => !this.dashboard());
+
+  // private hasNavigated = signal(false);
+
+  // private initNavigationEffect = effect(() => {
+  //   console.log('effect run');
+  //   const dashboard = this.dashboard();
+  //   const tabId = untracked(() => this.tabId());
+  //   const dashboardId = untracked(() => this.dashboardId());
+
+  //   if (!dashboard) return;
+  //   if (this.hasNavigated()) return;
+
+  //   if (tabId && dashboard.tabs.some((tab) => tab.id === tabId)) return;
+
+  //   const firstTabId = dashboard.tabs[0]?.id;
+  //   if (!firstTabId || !dashboardId) return;
+
+  //   console.log('before navigate:', dashboardId, firstTabId);
+  //   this.hasNavigated.set(true);
+  //   this.router.navigate(['/dashboard', dashboardId, firstTabId], {
+  //     replaceUrl: true,
+  //   });
+  // });
+
+  ngOnInit() {
+    const id = this.dashboardId();
+    if (id) this.store.dispatch(loadDashboardData({ dashboardId: id }));
+    console.log('from tab-switcher', this.dashboard(), this.tabs());
+  }
 
   selectTab(tabIndex: number) {
     if (tabIndex === this.currentTabIndex()) return;
-    this.dataStore.currentTabIndex.set(tabIndex);
-    this.dataStore.currentTabId.set(this.tabs()![tabIndex].id);
-    this.router.navigate(
-      [`/dashboard/${this.dataStore.currentDashboardId()}/${this.dataStore.currentTabId()}`],
-      {
-        replaceUrl: true,
-      },
-    );
+
+    const id = this.dashboardId();
+    if (!id) return;
+
+    this.router.navigate(['/dashboard', this.dashboardId(), this.tabs()[tabIndex].id], {
+      replaceUrl: true,
+    });
   }
 }

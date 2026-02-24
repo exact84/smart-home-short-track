@@ -1,17 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { DashboardList } from '../models';
-
-export interface DashboardListState {
-  dashboardList: DashboardList[];
-  loading: boolean;
-  error: string | undefined;
-}
-
-export const initialState: DashboardListState = {
-  dashboardList: [],
-  loading: false,
-  error: undefined,
-};
+import { DashboardList } from '../../models';
 
 export const loadDashboardList = createAction('[DashboardList] Load Dashboard List');
 
@@ -55,7 +43,7 @@ export const deleteDashboardFailed = createAction(
   props<{ error: string }>(),
 );
 
-export const selectDashboard = createAction(
-  '[DashboardList] Select Dashboard',
-  props<{ dashboardId: string }>(),
-);
+// export const selectDashboard = createAction(
+//   '[DashboardList] Select Dashboard',
+//   props<{ dashboardId: string }>(),
+// );

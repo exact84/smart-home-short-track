@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { DataStoreService } from '../services/data-store.service';
+import { DataStoreService } from '../../services/data-store.service';
 import {
   dashboardListLoaded,
   dashboardListLoadFailed,

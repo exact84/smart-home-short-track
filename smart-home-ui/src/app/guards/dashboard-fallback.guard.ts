@@ -2,16 +2,21 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { catchError, combineLatest, filter, map, of, take } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectDashboardList, selectDashboardListLoading } from '../store/dashboard.selectors';
-import { loadDashboardList } from '../store/dashboard.actions';
+import {
+  selectDashboardList,
+  selectDashboardListLoading,
+  selectDashboardListState,
+} from '../store/dashboard-list/dashboard.selectors';
+import { loadDashboardList } from '../store/dashboard-list/dashboard.actions';
 
 export const dashboardFallbackGuard: CanActivateFn = (route) => {
   const router = inject(Router);
   const store = inject(Store);
 
   const dashboardId = route.paramMap.get('dashboardId');
+  const dashboardList = store.selectSignal(selectDashboardListState);
 
-  store.dispatch(loadDashboardList());
+  if (dashboardList().dashboardList.length === 0) store.dispatch(loadDashboardList());
 
   return combineLatest([
     store.select(selectDashboardList),
@@ -22,7 +27,7 @@ export const dashboardFallbackGuard: CanActivateFn = (route) => {
     map(([list]) => {
       if (list.length === 0 || list.some((d) => d.id === dashboardId)) return true;
 
-      // console.log('dashboard не найден', list[0].id);
+      console.log('dashboard не найден', list[0].id);
       return router.createUrlTree(['/dashboard', list[0].id]);
     }),
     catchError((error) => {
