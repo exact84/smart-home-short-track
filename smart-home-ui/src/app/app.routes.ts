@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Layout } from './layout/layout';
 import { authGuard } from './guards/auth-guard';
+import { dashboardFallbackGuard } from './guards/dashboard-fallback.guard';
 
 export const routes: Routes = [
   {
@@ -19,17 +20,17 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () => import('./components/dashboard/dashboard').then((m) => m.Dashboard),
-        canActivate: [authGuard],
+        canActivate: [authGuard, dashboardFallbackGuard],
       },
       {
         path: 'dashboard/:dashboardId',
         loadComponent: () => import('./components/dashboard/dashboard').then((m) => m.Dashboard),
-        canActivate: [authGuard],
+        canActivate: [authGuard, dashboardFallbackGuard],
       },
       {
         path: 'dashboard/:dashboardId/:tabId',
         loadComponent: () => import('./components/dashboard/dashboard').then((m) => m.Dashboard),
-        canActivate: [authGuard],
+        canActivate: [authGuard, dashboardFallbackGuard],
       },
     ],
   },
