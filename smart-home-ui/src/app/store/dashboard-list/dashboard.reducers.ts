@@ -5,6 +5,9 @@ import {
   createDashboardSuccess,
   dashboardListLoaded,
   dashboardListLoadFailed,
+  deleteDashboard,
+  deleteDashboardFailed,
+  deleteDashboardSuccess,
   loadDashboardList,
 } from './dashboard.actions';
 import { DashboardListItem } from '../../models';
@@ -15,6 +18,7 @@ export interface DashboardListState {
   loading: boolean;
   error: string | undefined;
   createError: string | undefined;
+  lastDeletedDashboard: DashboardListItem | undefined;
 }
 
 export const initialState: DashboardListState = {
@@ -22,6 +26,7 @@ export const initialState: DashboardListState = {
   loading: true,
   error: undefined,
   createError: undefined,
+  lastDeletedDashboard: undefined,
 };
 
 export const dashboardListReducer = createReducer(
@@ -76,4 +81,30 @@ export const dashboardListReducer = createReducer(
     ...state,
     createError: undefined,
   })),
+
+  on(deleteDashboard, (state, { dashboardId }) => {
+    const dashboard = state.dashboardList.find((d) => d.id === dashboardId);
+    return {
+      ...state,
+      dashboardList: state.dashboardList.filter((item) => item.id !== dashboardId),
+      lastDeletedDashboard: dashboard,
+      error: undefined,
+    };
+  }),
+
+  on(deleteDashboardSuccess, (state) => {
+    return {
+      ...state,
+      lastDeletedDashboard: undefined,
+    };
+  }),
+
+  on(deleteDashboardFailed, (state, { dashboard, error }) => {
+    return {
+      ...state,
+      dashboardList: [...state.dashboardList, dashboard],
+      lastDeletedDashboard: undefined,
+      error,
+    };
+  }),
 );

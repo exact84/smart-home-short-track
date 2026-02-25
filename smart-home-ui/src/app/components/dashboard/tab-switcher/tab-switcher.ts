@@ -7,10 +7,15 @@ import { map } from 'rxjs';
 import { CardInfo } from '../../../models';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { loadDashboardData } from '../../../store/dashboard-data/dashboard-data.actions';
+import { MatIconModule } from '@angular/material/icon';
+import { DashboardFacade } from '../../../store/dashboard-data/dashboard-data.facade';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialog } from '../../ui/confirm-dialog/confirm-dialog';
+import { deleteDashboard } from '../../../store/dashboard-list/dashboard.actions';
 
 @Component({
   selector: 'app-tab-switcher',
-  imports: [CardList],
+  imports: [CardList, MatIconModule],
   templateUrl: './tab-switcher.html',
   styleUrl: './tab-switcher.scss',
 })
@@ -18,6 +23,7 @@ export class TabSwitcher implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private store = inject(Store);
+  private facade = inject(DashboardFacade);
 
   currentTabIndex = computed(() => {
     const tabs = this.tabs();
@@ -50,33 +56,30 @@ export class TabSwitcher implements OnInit {
 
   loading = computed(() => !this.dashboard());
 
-  // private hasNavigated = signal(false);
-
-  // private initNavigationEffect = effect(() => {
-  //   console.log('effect run');
-  //   const dashboard = this.dashboard();
-  //   const tabId = untracked(() => this.tabId());
-  //   const dashboardId = untracked(() => this.dashboardId());
-
-  //   if (!dashboard) return;
-  //   if (this.hasNavigated()) return;
-
-  //   if (tabId && dashboard.tabs.some((tab) => tab.id === tabId)) return;
-
-  //   const firstTabId = dashboard.tabs[0]?.id;
-  //   if (!firstTabId || !dashboardId) return;
-
-  //   console.log('before navigate:', dashboardId, firstTabId);
-  //   this.hasNavigated.set(true);
-  //   this.router.navigate(['/dashboard', dashboardId, firstTabId], {
-  //     replaceUrl: true,
-  //   });
-  // });
+  private dialog = inject(MatDialog);
 
   ngOnInit() {
     const id = this.dashboardId();
     if (id) this.store.dispatch(loadDashboardData({ dashboardId: id }));
     console.log('from tab-switcher', this.dashboard(), this.tabs());
+  }
+
+  onRemoveDashboardClick() {
+    const confirmDialog = this.dialog.open(ConfirmDialog, {
+      width: '300px',
+      data: { message: `Delete "${this.dashboardId()}" dashboard?` },
+    });
+
+    confirmDialog.afterClosed().subscribe((result) => {
+      const id = this.dashboardId();
+      if (result && id) {
+        this.store.dispatch(deleteDashboard({ dashboardId: id }));
+        this.router.navigate(['/dashboard']);
+      }
+    });
+  }
+  onEditDashboardClick() {
+    this.facade.toggleEditMode();
   }
 
   selectTab(tabIndex: number) {

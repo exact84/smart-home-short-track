@@ -22,3 +22,8 @@ export const selectAddDashboardError = createSelector(
   selectDashboardListState,
   (state) => state.createError,
 );
+
+export const selectLastDeletedDashboard = createSelector(
+  selectDashboardListState,
+  (state) => state.lastDeletedDashboard,
+);

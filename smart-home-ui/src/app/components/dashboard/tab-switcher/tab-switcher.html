@@ -1,19 +1,29 @@
 <div class="tabs-container">
-  @if (loading()) {
-    <div>Loading...</div>
-  } @else {
-    @for (tab of tabs(); track $index) {
-      <button class="tab" (click)="selectTab($index)">{{ tab.title }}</button>
-    } @empty {
-      @if (tabs().length === 0) {
-        <div class="empty">
-          You don’t have any tabs yet. They’ll appear here as soon as you create them
-        </div>
-      } @else {
-        <div class="empty">Choose the dashboard you want to view</div>
+  <div class="tabs">
+    @if (loading()) {
+      <div>Loading...</div>
+    } @else {
+      @for (tab of tabs(); track $index) {
+        <button class="tab" (click)="selectTab($index)">{{ tab.title }}</button>
+      } @empty {
+        @if (tabs().length === 0) {
+          <div class="empty">
+            You don’t have any tabs yet. They’ll appear here as soon as you create them
+          </div>
+        } @else {
+          <div class="empty">Choose the dashboard you want to view</div>
+        }
       }
     }
-  }
+  </div>
+  <div class="icons">
+    <button class="icon" (click)="onEditDashboardClick()">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button class="icon" (click)="onRemoveDashboardClick()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
 </div>
 
 <app-card-list [cards]="cards()"></app-card-list>

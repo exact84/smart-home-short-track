@@ -8,6 +8,7 @@
 .tabs-container {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   width: 100%;
   background-color: var(--bg-header-color);
 }
@@ -30,4 +31,24 @@
   .tabs-container {
     padding-left: 40px;
   }
+}
+
+.icons {
+  display: flex;
+  flex-direction: row;
+}
+
+.icon {
+  display: flex;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  padding: 5px;
+  align-items: center;
+}
+
+.icon:hover {
+  background-color: var(--bg-hover-color);
+  color: var(--toggle-color); //rgb(84, 207, 255);
+  cursor: pointer;
 }

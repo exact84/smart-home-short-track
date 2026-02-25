@@ -25,6 +25,10 @@ export class DataStoreService {
     return this.http.post<DashboardListItem>(`dashboards`, dashboard);
   }
 
+  deleteDashboard(dashboardId: string) {
+    return this.http.delete(`dashboards/${dashboardId}`);
+  }
+
   getDashboardData(dashboardId: string) {
     return this.http.get<DashboardData>(`dashboards/${dashboardId}`);
   }

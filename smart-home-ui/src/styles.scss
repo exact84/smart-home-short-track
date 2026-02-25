@@ -12,6 +12,7 @@
   --bg-color: #282828;
   --toggle-color: rgb(0, 162, 255);
   --icons-active-color: yellow;
+  --hover-color: rgb(0, 65, 65);
 
   @include mat.slide-toggle-overrides(
     (

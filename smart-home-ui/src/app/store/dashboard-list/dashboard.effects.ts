@@ -7,15 +7,21 @@ import {
   createDashboardSuccess,
   dashboardListLoaded,
   dashboardListLoadFailed,
+  deleteDashboard,
+  deleteDashboardFailed,
+  deleteDashboardSuccess,
   loadDashboardList,
 } from './dashboard.actions';
-import { switchMap, map, catchError, of, mergeMap } from 'rxjs';
+import { switchMap, map, catchError, of, mergeMap, withLatestFrom } from 'rxjs';
 import { extractHttpErrorMessage } from '../../utils/http-error.utility';
+import { selectLastDeletedDashboard } from './dashboard.selectors';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class DashboardEffects {
   private actions$ = inject(Actions);
   private storeService = inject(DataStoreService);
+  private store = inject(Store);
 
   loadDashboardList$ = createEffect(() => {
     return this.actions$.pipe(
@@ -45,6 +51,26 @@ export class DashboardEffects {
           ),
         ),
       ),
+    ),
+  );
+
+  deleteDashboard$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(deleteDashboard),
+      withLatestFrom(this.store.select(selectLastDeletedDashboard)),
+      mergeMap(([{ dashboardId }, dashboard]) => {
+        return this.storeService.deleteDashboard(dashboardId).pipe(
+          map(() => deleteDashboardSuccess()),
+          catchError((error) => {
+            return of(
+              deleteDashboardFailed({
+                dashboard: dashboard!,
+                error: extractHttpErrorMessage(error),
+              }),
+            );
+          }),
+        );
+      }),
     ),
   );
 }

@@ -35,9 +35,9 @@ export class DashboardDataEffects {
       this.actions$.pipe(
         ofType(dashboardDataLoaded),
         tap(({ dashboard, dashboardId }) => {
-          if (dashboard.tabs.length > 0) {
-            this.router.navigate(['dashboard', dashboardId, dashboard.tabs[0].id]);
-          }
+          let tabId = '';
+          if (dashboard.tabs.length > 0) tabId = dashboard.tabs[0].id;
+          this.router.navigate(['dashboard', dashboardId, tabId]);
         }),
       ),
     { dispatch: false },

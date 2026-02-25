@@ -30,14 +30,11 @@ export const deleteDashboard = createAction(
   props<{ dashboardId: string }>(),
 );
 
-export const deleteDashboardSuccess = createAction(
-  '[DashboardList] Delete Dashboard Success',
-  props<{ dashboardId: string }>(),
-);
+export const deleteDashboardSuccess = createAction('[DashboardList] Delete Dashboard Success');
 
 export const deleteDashboardFailed = createAction(
   '[DashboardList] Delete Dashboard Failed',
-  props<{ error: string }>(),
+  props<{ dashboard: DashboardListItem; error: string }>(),
 );
 
 // export const selectDashboard = createAction(
