@@ -9,10 +9,11 @@ import { selectDashboardDataState } from '../../../store/dashboard-data/dashboar
 import { Tab } from '../../../models';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, filter } from 'rxjs';
+import { AddDashboard } from './add-dashboard/add-dashboard';
 
 @Component({
   selector: 'app-menu',
-  imports: [MatIconModule, AsyncPipe],
+  imports: [MatIconModule, AsyncPipe, AddDashboard],
   templateUrl: './menu.html',
   styleUrl: './menu.scss',
 })
@@ -38,12 +39,5 @@ export class Menu {
     console.log(dashboardId, this.currentDashboardId());
 
     this.store.dispatch(loadDashboardData({ dashboardId }));
-
-    // const data = this.dashboardData();
-
-    // this.tabs = data?.tabs || [];
-    // if (this.tabs.length > 0) {
-    //   this.router.navigate(['dashboard', dashboardId, this.tabs[0]?.id]);
-    // }
   }
 }

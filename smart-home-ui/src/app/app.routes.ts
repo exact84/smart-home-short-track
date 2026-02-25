@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { Layout } from './layout/layout';
-import { authGuard } from './guards/auth-guard';
+import { authGuard } from './guards/auth.guard';
 import { dashboardFallbackGuard } from './guards/dashboard-fallback.guard';
 
 export const routes: Routes = [

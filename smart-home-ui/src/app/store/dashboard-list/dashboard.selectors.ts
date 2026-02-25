@@ -12,3 +12,13 @@ export const selectDashboardListLoading = createSelector(
   selectDashboardListState,
   (state) => state.loading,
 );
+
+export const selectDashboardListError = createSelector(
+  selectDashboardListState,
+  (state) => state.error,
+);
+
+export const selectAddDashboardError = createSelector(
+  selectDashboardListState,
+  (state) => state.createError,
+);

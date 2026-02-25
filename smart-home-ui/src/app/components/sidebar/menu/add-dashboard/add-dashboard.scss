@@ -1,0 +1,18 @@
+.menuitem {
+  display: flex;
+  align-items: center;
+  border: none;
+  padding: 6px 6px;
+  margin: 4px;
+  border-radius: 8px;
+  gap: 10px;
+  background-color: var(--bg-color);
+}
+
+@media (hover: hover) {
+  .menuitem:hover {
+    background-color: var(--bg-header-color);
+    color: var(--toggle-color);
+    cursor: pointer;
+  }
+}

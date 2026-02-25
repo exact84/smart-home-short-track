@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { DashboardData, Tab } from '../models';
-import { DashboardList } from '../models/dashboard-list.model';
+import { DashboardListItem } from '../models/dashboard-list.model';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -12,58 +12,22 @@ export class DataStoreService {
   router = inject(Router);
   private readonly _tabs = signal<Tab[]>([]);
   readonly tabs = this._tabs.asReadonly();
-  readonly dashboardList = signal<DashboardList[]>([]);
+  readonly dashboardList = signal<DashboardListItem[]>([]);
   public currentDashboardId = signal<string | undefined>(undefined);
   public currentTabId = signal<string | undefined>(undefined);
   public currentTabIndex = signal(0);
 
-  // getDashboardList() {
-  //   this.http.get<DashboardList[]>(`dashboards`).subscribe((response) => {
-  //     this.dashboardList.set(response);
-  //     if (response.length > 0) this.currentDashboardId.set(response[0].id);
-  //   });
-  // }
-
   getDashboardList() {
-    return this.http.get<DashboardList[]>(`dashboards`);
+    return this.http.get<DashboardListItem[]>(`dashboards`);
   }
 
-  createDashboard(dashboard: DashboardList) {
-    return this.http.post<DashboardList>(`dashboards`, dashboard);
+  createDashboard(dashboard: DashboardListItem) {
+    return this.http.post<DashboardListItem>(`dashboards`, dashboard);
   }
 
   getDashboardData(dashboardId: string) {
-    console.log('from service:', dashboardId);
     return this.http.get<DashboardData>(`dashboards/${dashboardId}`);
   }
-
-  // getDashboardData(dashboardId: string, tabId?: string) {
-  //   this.currentDashboardId.set(dashboardId);
-
-  //   this.http
-  //     .get<DashboardData>(`dashboards/${dashboardId}`)
-  //     .pipe(
-  //       catchError((error: HttpErrorResponse) => {
-  //         if (error.status === 404) {
-  //           this.getDashboardList();
-  //           this.router.navigate(['/dashboard', this.dashboardList()[0].id]);
-  //           return EMPTY;
-  //         }
-  //         return throwError(() => error);
-  //       }),
-  //     )
-  //     .subscribe((response) => {
-  //       const exists = response.tabs.some((tab) => tab.id === tabId);
-
-  //       if (!exists)
-  //         this.router.navigate([`/dashboard/${dashboardId}/${response.tabs[0].id}`], {
-  //           replaceUrl: true,
-  //         });
-  //       this._tabs.set(response.tabs);
-  //       this.currentTabId.set(exists ? tabId : response.tabs[0].id);
-  //       this.currentTabIndex.set(response.tabs.findIndex((tab) => tab.id === this.currentTabId()));
-  //     });
-  // }
 
   public toggleDevice(cardId: string, deviceLabel: string, state?: boolean) {
     this._tabs.update((tabs) =>

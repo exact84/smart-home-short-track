@@ -1,21 +1,27 @@
 import { createReducer, on } from '@ngrx/store';
 import {
+  createDashboard,
+  createDashboardFailed,
+  createDashboardSuccess,
   dashboardListLoaded,
   dashboardListLoadFailed,
   loadDashboardList,
 } from './dashboard.actions';
-import { DashboardList } from '../../models';
+import { DashboardListItem } from '../../models';
+import { resetCreateDashboardError } from '../dashboard-data/dashboard-data.actions';
 
 export interface DashboardListState {
-  dashboardList: DashboardList[];
+  dashboardList: DashboardListItem[];
   loading: boolean;
   error: string | undefined;
+  createError: string | undefined;
 }
 
 export const initialState: DashboardListState = {
   dashboardList: [],
   loading: true,
   error: undefined,
+  createError: undefined,
 };
 
 export const dashboardListReducer = createReducer(
@@ -45,4 +51,29 @@ export const dashboardListReducer = createReducer(
       error,
     };
   }),
+
+  on(createDashboard, (state, { dashboardItem }) => {
+    return {
+      ...state,
+      dashboardList: [...state.dashboardList, dashboardItem],
+      createError: undefined,
+    };
+  }),
+
+  on(createDashboardSuccess, (state) => {
+    return state;
+  }),
+
+  on(createDashboardFailed, (state, { dashboardId, error }) => {
+    return {
+      ...state,
+      dashboardList: state.dashboardList.filter((item) => item.id !== dashboardId),
+      createError: error,
+    };
+  }),
+
+  on(resetCreateDashboardError, (state) => ({
+    ...state,
+    createError: undefined,
+  })),
 );

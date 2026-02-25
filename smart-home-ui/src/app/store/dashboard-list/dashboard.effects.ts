@@ -2,11 +2,15 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { DataStoreService } from '../../services/data-store.service';
 import {
+  createDashboard,
+  createDashboardFailed,
+  createDashboardSuccess,
   dashboardListLoaded,
   dashboardListLoadFailed,
   loadDashboardList,
 } from './dashboard.actions';
-import { switchMap, map, catchError, of } from 'rxjs';
+import { switchMap, map, catchError, of, mergeMap } from 'rxjs';
+import { extractHttpErrorMessage } from '../../utils/http-error.utility';
 
 @Injectable()
 export class DashboardEffects {
@@ -24,4 +28,23 @@ export class DashboardEffects {
       ),
     );
   });
+
+  createDashboard$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(createDashboard),
+      mergeMap(({ dashboardItem }) =>
+        this.storeService.createDashboard(dashboardItem).pipe(
+          map(() => createDashboardSuccess()),
+          catchError((error) =>
+            of(
+              createDashboardFailed({
+                dashboardId: dashboardItem.id,
+                error: extractHttpErrorMessage(error),
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }

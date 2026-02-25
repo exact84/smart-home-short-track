@@ -1,4 +1,4 @@
-export interface DashboardList {
+export interface DashboardListItem {
   id: string;
   title: string;
   icon: string;

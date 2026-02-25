@@ -15,3 +15,5 @@ export const dashboardDataLoadFailed = createAction(
   '[DashboardData] Dashboard Data Load Failed',
   props<{ error: string }>(),
 );
+
+export const resetCreateDashboardError = createAction('[DashboardList] Reset Create Error');

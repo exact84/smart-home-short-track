@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Create new dashboard</h2>
+
+<form #form="ngForm">
+  <mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="id" name="id" placeholder="Id" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="title" name="title" placeholder="Title" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="icon" name="icon" placeholder="Icon name" />
+    </mat-form-field>
+    @if (error) {
+      <mat-error>{{ error }}</mat-error>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="false">Cancel</button>
+    <button mat-button (click)="submit()" [disabled]="form.invalid">Create</button>
+  </mat-dialog-actions>
+</form>

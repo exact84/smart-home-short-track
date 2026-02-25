@@ -1,11 +1,11 @@
 import { createAction, props } from '@ngrx/store';
-import { DashboardList } from '../../models';
+import { DashboardListItem } from '../../models';
 
 export const loadDashboardList = createAction('[DashboardList] Load Dashboard List');
 
 export const dashboardListLoaded = createAction(
   '[DashboardList] Dashboard List Load Success',
-  props<{ dashboardList: DashboardList[] }>(),
+  props<{ dashboardList: DashboardListItem[] }>(),
 );
 
 export const dashboardListLoadFailed = createAction(
@@ -15,17 +15,14 @@ export const dashboardListLoadFailed = createAction(
 
 export const createDashboard = createAction(
   '[DashboardList] Create Dashboard',
-  props<{ dashboardList: DashboardList }>(),
+  props<{ dashboardItem: DashboardListItem }>(),
 );
 
-export const createDashboardSuccess = createAction(
-  '[DashboardList] Create Dashboard Success',
-  props<{ dashboardList: DashboardList }>(),
-);
+export const createDashboardSuccess = createAction('[DashboardList] Create Dashboard Success');
 
 export const createDashboardFailed = createAction(
   '[DashboardList] Create Dashboard Failed',
-  props<{ error: string }>(),
+  props<{ dashboardId: string; error: string }>(),
 );
 
 export const deleteDashboard = createAction(
