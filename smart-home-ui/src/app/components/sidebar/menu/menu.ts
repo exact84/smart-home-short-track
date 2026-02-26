@@ -36,8 +36,10 @@ export class Menu {
 
   onDashboardClick(dashboardId: string) {
     if (dashboardId === this.currentDashboardId()) return;
-    console.log(dashboardId, this.currentDashboardId());
+    console.log(dashboardId, this.currentDashboardId(), this.dashboardData()?.tabs);
 
-    this.store.dispatch(loadDashboardData({ dashboardId }));
+    let tabId = '';
+    if (this.tabs.length > 0) tabId = this.dashboardData()?.tabs[0].id || '';
+    this.store.dispatch(loadDashboardData({ dashboardId, tabId }));
   }
 }

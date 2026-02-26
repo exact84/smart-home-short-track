@@ -9,9 +9,10 @@ import {
   deleteDashboardFailed,
   deleteDashboardSuccess,
   loadDashboardList,
+  resetCreateDashboardError,
 } from './dashboard.actions';
 import { DashboardListItem } from '../../models';
-import { resetCreateDashboardError } from '../dashboard-data/dashboard-data.actions';
+// import { resetCreateDashboardError } from '../dashboard-data/dashboard-data.actions';
 
 export interface DashboardListState {
   dashboardList: DashboardListItem[];

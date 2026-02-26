@@ -33,6 +33,10 @@ export class DataStoreService {
     return this.http.get<DashboardData>(`dashboards/${dashboardId}`);
   }
 
+  saveDashboardData(dashboardId: string, dashboard: DashboardData) {
+    return this.http.put<DashboardData>(`dashboards/${dashboardId}`, dashboard);
+  }
+
   public toggleDevice(cardId: string, deviceLabel: string, state?: boolean) {
     this._tabs.update((tabs) =>
       tabs.map((tab) => ({

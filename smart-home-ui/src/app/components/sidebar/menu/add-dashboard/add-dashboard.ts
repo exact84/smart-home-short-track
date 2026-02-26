@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { AddDashboardDialog } from './dialog/add-dashboard-dialog';
 import { Store } from '@ngrx/store';
-import { resetCreateDashboardError } from '../../../../store/dashboard-data/dashboard-data.actions';
+import { resetCreateDashboardError } from '../../../../store/dashboard-list/dashboard.actions';
 
 @Component({
   selector: 'app-add-dashboard',

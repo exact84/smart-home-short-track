@@ -1,29 +1,91 @@
 <div class="tabs-container">
-  <div class="tabs">
-    @if (loading()) {
-      <div>Loading...</div>
-    } @else {
-      @for (tab of tabs(); track $index) {
-        <button class="tab" (click)="selectTab($index)">{{ tab.title }}</button>
-      } @empty {
-        @if (tabs().length === 0) {
-          <div class="empty">
-            You don’t have any tabs yet. They’ll appear here as soon as you create them
-          </div>
-        } @else {
-          <div class="empty">Choose the dashboard you want to view</div>
+  @if (!facade.editMode()) {
+    <div class="tabs">
+      @if (loading()) {
+        <div>Loading...</div>
+      } @else {
+        @for (tab of tabs(); track $index) {
+          <button class="tab" (click)="selectTab($index)">{{ tab.title }}</button>
+        } @empty {
+          @if (tabs().length === 0) {
+            <div class="empty">
+              You don’t have any tabs yet. They’ll appear here as soon as you create them
+            </div>
+          } @else {
+            <div class="empty">Choose the dashboard you want to view</div>
+          }
         }
       }
-    }
-  </div>
-  <div class="icons">
-    <button class="icon" (click)="onEditDashboardClick()">
-      <mat-icon>edit</mat-icon>
-    </button>
-    <button class="icon" (click)="onRemoveDashboardClick()">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </div>
+    </div>
+    <div class="icons">
+      <button class="icon" (click)="onEditDashboardClick()">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button class="icon" (click)="onRemoveDashboardClick()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  } @else {
+    <div class="header">
+      <div class="header-up">
+        <div class="info">
+          <div class="dashboard-title">
+            Dashboard: <b>{{ getActiveDashboardTitle() }}</b>
+          </div>
+        </div>
+        <div class="buttons">
+          <button class="button" (click)="onDiscardEditDashboardClick()">
+            <span>discard</span>
+          </button>
+          <button class="button" (click)="onSaveEditDashboardClick()">
+            <span>save</span>
+          </button>
+        </div>
+      </div>
+      <div class="header-down">
+        @for (tab of tabs(); track tab.id) {
+          @if (tab.id === this.tabs()[this.currentTabIndex()].id) {
+            <button
+              [disabled]="$index === 0"
+              class="mat-button"
+              (click)="onReorderTabClick(tab.id, 'left')"
+            >
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <div class="tab active">
+              <input
+                matInput
+                [value]="tab.title"
+                (input)="onTabTitleChange(tab.id, $event)"
+                maxlength="20"
+              />
+            </div>
+            <button class="mat-button" (click)="onRemoveTabClick(tab.id)">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <button
+              [disabled]="$index === tabs()!.length - 1"
+              class="mat-button"
+              (click)="onReorderTabClick(tab.id, 'right')"
+            >
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          } @else {
+            <button
+              class="tab"
+              [disabled]="facade.editMode()"
+              [class.active]="tab.id === this.tabs()[this.currentTabIndex()].id"
+            >
+              <span>{{ tab.title }}</span>
+            </button>
+          }
+        }
+        <button class="mat-button" (click)="onAddTabClick()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+  }
 </div>
 
 <app-card-list [cards]="cards()"></app-card-list>

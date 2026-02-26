@@ -25,6 +25,8 @@ export const createDashboardFailed = createAction(
   props<{ dashboardId: string; error: string }>(),
 );
 
+export const resetCreateDashboardError = createAction('[DashboardList] Reset Create Error');
+
 export const deleteDashboard = createAction(
   '[DashboardList] Delete Dashboard',
   props<{ dashboardId: string }>(),

@@ -12,6 +12,7 @@ import { DashboardFacade } from '../../../store/dashboard-data/dashboard-data.fa
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../ui/confirm-dialog/confirm-dialog';
 import { deleteDashboard } from '../../../store/dashboard-list/dashboard.actions';
+import { selectDashboardList } from '../../../store/dashboard-list/dashboard.selectors';
 
 @Component({
   selector: 'app-tab-switcher',
@@ -23,7 +24,7 @@ export class TabSwitcher implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private store = inject(Store);
-  private facade = inject(DashboardFacade);
+  protected facade = inject(DashboardFacade);
 
   currentTabIndex = computed(() => {
     const tabs = this.tabs();
@@ -49,7 +50,7 @@ export class TabSwitcher implements OnInit {
 
   public cards = computed<CardInfo[]>(() => {
     const tabs = this.tabs();
-    console.log('cards changed', this.currentTabIndex(), tabs[this.currentTabIndex()]);
+    // console.log('cards changed', this.currentTabIndex(), tabs[this.currentTabIndex()]);
     const tab = tabs[this.currentTabIndex()];
     return tab?.cards ?? [];
   });
@@ -60,8 +61,8 @@ export class TabSwitcher implements OnInit {
 
   ngOnInit() {
     const id = this.dashboardId();
-    if (id) this.store.dispatch(loadDashboardData({ dashboardId: id }));
     console.log('from tab-switcher', this.dashboard(), this.tabs());
+    if (id) this.store.dispatch(loadDashboardData({ dashboardId: id, tabId: this.tabId() || '' }));
   }
 
   onRemoveDashboardClick() {
@@ -91,5 +92,39 @@ export class TabSwitcher implements OnInit {
     this.router.navigate(['/dashboard', this.dashboardId(), this.tabs()[tabIndex].id], {
       replaceUrl: true,
     });
+  }
+
+  getActiveDashboardTitle() {
+    return (
+      this.store
+        .selectSignal(selectDashboardList)()
+        .find((d) => d.id === this.dashboardId())?.title ?? this.dashboardId()
+    );
+  }
+
+  onSaveEditDashboardClick() {
+    this.facade.updateDashboard(this.dashboardId() || '');
+  }
+
+  onDiscardEditDashboardClick() {
+    this.facade.discardChanges(this.dashboardId() || '', this.tabId() || '');
+  }
+
+  onReorderTabClick(tabId: string, direction: 'left' | 'right') {
+    this.facade.reorderTab(tabId, direction);
+  }
+
+  onTabTitleChange(tabId: string, event: Event) {
+    const newTitle = (event.target as HTMLInputElement).value;
+    this.facade.updateTabTitle(tabId, newTitle);
+  }
+
+  onRemoveTabClick(tabId: string) {
+    this.facade.removeTab(this.dashboardId() || '', tabId);
+  }
+
+  onAddTabClick() {
+    this.facade.addTab('newTab');
+    this.selectTab(this.tabs().length - 1);
   }
 }
