@@ -23,7 +23,7 @@ export class DashboardEffects {
   private storeService = inject(DataStoreService);
   private store = inject(Store);
 
-  loadDashboardList$ = createEffect(() => {
+  private loadDashboardList$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(loadDashboardList),
       switchMap(() =>
@@ -35,7 +35,7 @@ export class DashboardEffects {
     );
   });
 
-  createDashboard$ = createEffect(() =>
+  private createDashboard$ = createEffect(() =>
     this.actions$.pipe(
       ofType(createDashboard),
       mergeMap(({ dashboardItem }) =>
@@ -54,7 +54,7 @@ export class DashboardEffects {
     ),
   );
 
-  deleteDashboard$ = createEffect(() =>
+  private deleteDashboard$ = createEffect(() =>
     this.actions$.pipe(
       ofType(deleteDashboard),
       withLatestFrom(this.store.select(selectLastDeletedDashboard)),

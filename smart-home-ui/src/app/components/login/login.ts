@@ -19,7 +19,7 @@ export class Login {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  form = new FormGroup<LoginFormData>({
+  protected form = new FormGroup<LoginFormData>({
     userName: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required],
@@ -30,7 +30,7 @@ export class Login {
     }),
   });
 
-  onSubmit() {
+  protected onSubmit(): void {
     const loginData = this.form.getRawValue();
     this.authService.login(loginData).subscribe({
       next: () => this.router.navigate(['dashboard']),

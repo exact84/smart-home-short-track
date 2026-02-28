@@ -10,20 +10,20 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './layout.scss',
 })
 export class Layout {
-  sidebarOpen = signal(false);
-  windowWidth = signal(window.innerWidth);
+  protected sidebarOpen = signal(false);
+  protected windowWidth = signal(window.innerWidth);
 
-  constructor() {
+  public constructor() {
     window.addEventListener('resize', () => {
       this.windowWidth.set(window.innerWidth);
     });
   }
 
-  showSidebar = computed(() => {
+  protected showSidebar = computed(() => {
     return this.windowWidth() >= 768 || this.sidebarOpen();
   });
 
-  toggleSidebar() {
+  protected toggleSidebar(): void {
     this.sidebarOpen.update((open) => !open);
   }
 }

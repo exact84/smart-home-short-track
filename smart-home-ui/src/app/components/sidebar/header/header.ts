@@ -11,5 +11,5 @@ import { MatIconModule } from '@angular/material/icon';
   },
 })
 export class Header {
-  readonly toggleFn = output<void>();
+  protected readonly toggleFn = output<void>();
 }

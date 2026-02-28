@@ -10,5 +10,5 @@ import { Footer } from './footer/footer';
   styleUrl: './sidebar.scss',
 })
 export class Sidebar {
-  readonly toggleFn = output<void>();
+  public readonly toggleFn = output<void>();
 }

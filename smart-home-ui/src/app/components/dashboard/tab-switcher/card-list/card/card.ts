@@ -21,14 +21,16 @@ export class Card {
     () => this.card()?.items?.filter((item) => item.type === 'device') ?? [],
   );
   public hasToggle = computed(() => this.devices().length > 1);
-  readonly isMasterToggleOn = computed(() => this.devices().some((device) => device.state));
-  dataStore = inject(DataStoreService);
+  protected readonly isMasterToggleOn = computed(() =>
+    this.devices().some((device) => device.state),
+  );
+  private readonly dataStore = inject(DataStoreService);
 
-  public status() {
+  public status(): string {
     return this.devices()[0]?.state ? 'On' : 'Off';
   }
 
-  toggleAll() {
+  protected toggleAll(): void {
     for (const device of this.devices()) {
       this.dataStore.toggleDevice(
         this.card()?.id ?? '',

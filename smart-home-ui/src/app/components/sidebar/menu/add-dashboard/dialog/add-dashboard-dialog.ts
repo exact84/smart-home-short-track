@@ -33,9 +33,9 @@ import { first } from 'rxjs';
   styleUrl: './add-dashboard-dialog.scss',
 })
 export class AddDashboardDialog {
-  id = '';
-  title = '';
-  icon = '';
+  public id = '';
+  public title = '';
+  public icon = '';
 
   private store = inject(Store);
 
@@ -46,17 +46,17 @@ export class AddDashboardDialog {
   public serverErrorSignal = toSignal(this.store.select(selectAddDashboardError));
   public localError = signal('');
 
-  get error() {
+  protected get error(): string {
     return (this.localError() || '') + (this.serverErrorSignal() || '');
   }
 
-  constructor() {
+  public constructor() {
     this.actions$.pipe(ofType(createDashboardSuccess), takeUntilDestroyed()).subscribe(() => {
       this.dialogRef.close();
     });
   }
 
-  submit() {
+  protected submit(): void {
     this.localError.set('');
 
     if (this.id.length > 40 || this.title.length > 40 || this.icon.length > 40) {

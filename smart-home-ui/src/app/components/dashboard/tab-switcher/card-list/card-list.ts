@@ -12,7 +12,7 @@ import { HighlightDirective } from '../../../../directives/highlight';
 export class CardList {
   public cards = input<CardInfo[]>();
 
-  hasActiveDevice(card: CardInfo): boolean {
+  protected hasActiveDevice(card: CardInfo): boolean {
     return card.items.some(
       (item): item is DeviceItem => item.type === 'device' && item.state === true,
     );

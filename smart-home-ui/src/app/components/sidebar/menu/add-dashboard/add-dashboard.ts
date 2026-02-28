@@ -15,7 +15,7 @@ export class AddDashboard {
   private dialog = inject(MatDialog);
   private store = inject(Store);
 
-  openDialog() {
+  protected openDialog(): void {
     const reference = this.dialog.open(AddDashboardDialog, {
       width: '500px',
     });

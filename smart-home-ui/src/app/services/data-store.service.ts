@@ -2,42 +2,44 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { DashboardData, Tab } from '../models';
 import { DashboardListItem } from '../models/dashboard-list.model';
-import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataStoreService {
-  http = inject(HttpClient);
-  router = inject(Router);
+  private readonly http = inject(HttpClient);
   private readonly _tabs = signal<Tab[]>([]);
-  readonly tabs = this._tabs.asReadonly();
-  readonly dashboardList = signal<DashboardListItem[]>([]);
+  // public tabs = this._tabs.asReadonly();
+  // public dashboardList = signal<DashboardListItem[]>([]);
   public currentDashboardId = signal<string | undefined>(undefined);
   public currentTabId = signal<string | undefined>(undefined);
   public currentTabIndex = signal(0);
 
-  getDashboardList() {
+  public getDashboardList(): Observable<DashboardListItem[]> {
     return this.http.get<DashboardListItem[]>(`dashboards`);
   }
 
-  createDashboard(dashboard: DashboardListItem) {
+  public createDashboard(dashboard: DashboardListItem): Observable<DashboardListItem> {
     return this.http.post<DashboardListItem>(`dashboards`, dashboard);
   }
 
-  deleteDashboard(dashboardId: string) {
-    return this.http.delete(`dashboards/${dashboardId}`);
+  public deleteDashboard(dashboardId: string): Observable<void> {
+    return this.http.delete<void>(`dashboards/${dashboardId}`);
   }
 
-  getDashboardData(dashboardId: string) {
+  public getDashboardData(dashboardId: string): Observable<DashboardData> {
     return this.http.get<DashboardData>(`dashboards/${dashboardId}`);
   }
 
-  saveDashboardData(dashboardId: string, dashboard: DashboardData) {
+  public saveDashboardData(
+    dashboardId: string,
+    dashboard: DashboardData,
+  ): Observable<DashboardData> {
     return this.http.put<DashboardData>(`dashboards/${dashboardId}`, dashboard);
   }
 
-  public toggleDevice(cardId: string, deviceLabel: string, state?: boolean) {
+  public toggleDevice(cardId: string, deviceLabel: string, state?: boolean): void {
     this._tabs.update((tabs) =>
       tabs.map((tab) => ({
         ...tab,

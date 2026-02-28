@@ -19,36 +19,36 @@ export class DashboardFacade {
   public editMode = signal(false);
   public newTabMode = signal(false);
 
-  discardChanges(dashboardId: string, tabId: string) {
+  public discardChanges(dashboardId: string, tabId: string): void {
     this.editMode.set(false);
     this.newTabMode.set(false);
     this.store.dispatch(loadDashboardData({ dashboardId, tabId }));
   }
 
-  updateDashboard(dashboardId: string) {
+  public updateDashboard(dashboardId: string): void {
     this.newTabMode.set(false);
     this.store.dispatch(saveDashboardData({ dashboardId }));
   }
 
-  toggleEditMode() {
+  public toggleEditMode(): void {
     this.editMode.update((v) => !v);
   }
 
-  addTab(title: string) {
+  public addTab(title: string): void {
     this.newTabMode.set(true);
     const tabId = generateId(title);
     this.store.dispatch(addTab({ tabId, title }));
   }
 
-  removeTab(dashboardId: string, tabId: string) {
+  public removeTab(dashboardId: string, tabId: string): void {
     this.store.dispatch(removeTab({ dashboardId, tabId }));
   }
 
-  reorderTab(tabId: string, direction: 'left' | 'right') {
+  public reorderTab(tabId: string, direction: 'left' | 'right'): void {
     this.store.dispatch(reorderTab({ tabId, direction }));
   }
 
-  updateTabTitle(tabId: string, title: string) {
+  public updateTabTitle(tabId: string, title: string): void {
     this.store.dispatch(updateTabTitle({ tabId, title }));
   }
 }

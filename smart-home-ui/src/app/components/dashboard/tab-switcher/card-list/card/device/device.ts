@@ -15,12 +15,12 @@ export class Device {
   public item = input<DeviceItem>();
   public cardId = input<string>();
   public layout = input<CardLayout>();
-  cardLayout = CardLayout;
+  protected cardLayout = CardLayout;
   protected isActive = computed(() => {
     return this.item()?.state ?? false;
   });
 
-  toggleDevice() {
+  protected toggleDevice(): void {
     if (!this.item) return;
     this.dataStore.toggleDevice(this.cardId() ?? '', this.item()?.label ?? '');
   }

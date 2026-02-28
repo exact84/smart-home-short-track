@@ -26,13 +26,13 @@ export class DashboardDataEffects {
 
   private dashboardData = this.store.selectSignal(selectDashboardDataState);
 
-  loadDashboardList$ = createEffect(() => {
+  private loadDashboardList$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(loadDashboardData),
       switchMap(({ dashboardId, tabId }) =>
         this.storeService.getDashboardData(dashboardId).pipe(
           map((dashboard) => {
-            console.log('from effect:', dashboardId);
+            console.log('from effect:', dashboardId, tabId);
             return dashboardDataLoaded({ dashboard, dashboardId, tabId });
           }),
           catchError((error) => of(dashboardDataLoadFailed({ error }))),
@@ -41,7 +41,7 @@ export class DashboardDataEffects {
     );
   });
 
-  navigateAfterLoad$ = createEffect(
+  private navigateAfterLoad$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(dashboardDataLoaded),
@@ -55,7 +55,7 @@ export class DashboardDataEffects {
     { dispatch: false },
   );
 
-  removeTab$ = createEffect(
+  private removeTab$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(removeTab),
@@ -73,7 +73,7 @@ export class DashboardDataEffects {
     { dispatch: false },
   );
 
-  saveDashboardData$ = createEffect(() => {
+  private saveDashboardData$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(saveDashboardData),
       switchMap(({ dashboardId }) =>
@@ -85,7 +85,7 @@ export class DashboardDataEffects {
     );
   });
 
-  saveDashboardDataSuccess$ = createEffect(
+  private saveDashboardDataSuccess$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(saveDashboardDataSuccess),

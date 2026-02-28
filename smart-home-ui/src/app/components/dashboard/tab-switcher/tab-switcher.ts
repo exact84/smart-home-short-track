@@ -13,40 +13,41 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../ui/confirm-dialog/confirm-dialog';
 import { deleteDashboard } from '../../../store/dashboard-list/dashboard.actions';
 import { selectDashboardList } from '../../../store/dashboard-list/dashboard.selectors';
+import { emptyTabMessage } from '../../../constants/fallback-messges';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-tab-switcher',
-  imports: [CardList, MatIconModule],
+  imports: [CardList, MatIconModule, MatTabsModule, MatButtonModule],
   templateUrl: './tab-switcher.html',
   styleUrl: './tab-switcher.scss',
 })
 export class TabSwitcher implements OnInit {
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private store = inject(Store);
-  protected facade = inject(DashboardFacade);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly store = inject(Store);
+  protected readonly facade = inject(DashboardFacade);
 
-  currentTabIndex = computed(() => {
+  public currentTabIndex = computed(() => {
     const tabs = this.tabs();
     const id = this.tabId();
     const index = tabs.findIndex((t) => t.id === id);
     return Math.max(index, 0);
   });
 
-  dashboardId = toSignal(
-    this.route.paramMap.pipe(map((parameters) => parameters.get('dashboardId'))),
+  private dashboardId = toSignal(
+    this.route.paramMap.pipe(map((parameters) => parameters.get('dashboardId') || '')),
+    { initialValue: '' },
   );
 
-  tabId = toSignal(
-    this.route.paramMap.pipe(
-      map((parameters) => {
-        return parameters.get('tabId');
-      }),
-    ),
+  private tabId = toSignal(
+    this.route.paramMap.pipe(map((parameters) => parameters.get('tabId') || '')),
+    { initialValue: '' },
   );
 
-  dashboard = this.store.selectSignal(selectDashboardDataState);
-  tabs = computed(() => this.dashboard()?.tabs ?? []);
+  private dashboard = this.store.selectSignal(selectDashboardDataState);
+  protected tabs = computed(() => this.dashboard()?.tabs ?? []);
 
   public cards = computed<CardInfo[]>(() => {
     const tabs = this.tabs();
@@ -55,17 +56,24 @@ export class TabSwitcher implements OnInit {
     return tab?.cards ?? [];
   });
 
-  loading = computed(() => !this.dashboard());
+  protected loading = computed(() => !this.dashboard());
 
   private dialog = inject(MatDialog);
+  protected emptyTabMessage = emptyTabMessage;
 
-  ngOnInit() {
+  public ngOnInit(): void {
     const id = this.dashboardId();
-    console.log('from tab-switcher', this.dashboard(), this.tabs());
-    if (id) this.store.dispatch(loadDashboardData({ dashboardId: id, tabId: this.tabId() || '' }));
+    console.log(
+      'from tab-switcher',
+      this.dashboard(),
+      this.tabs(),
+      this.tabId(),
+      this.currentTabIndex(),
+    );
+    if (id) this.store.dispatch(loadDashboardData({ dashboardId: id, tabId: this.tabId() }));
   }
 
-  onRemoveDashboardClick() {
+  protected onRemoveDashboardClick(): void {
     const confirmDialog = this.dialog.open(ConfirmDialog, {
       width: '300px',
       data: { message: `Delete "${this.dashboardId()}" dashboard?` },
@@ -79,22 +87,22 @@ export class TabSwitcher implements OnInit {
       }
     });
   }
-  onEditDashboardClick() {
+  protected onEditDashboardClick(): void {
     this.facade.toggleEditMode();
   }
 
-  selectTab(tabIndex: number) {
-    if (tabIndex === this.currentTabIndex()) return;
-
+  protected selectTab(tabIndex: number): void {
     const id = this.dashboardId();
     if (!id) return;
-
-    this.router.navigate(['/dashboard', this.dashboardId(), this.tabs()[tabIndex].id], {
-      replaceUrl: true,
-    });
+    const tab = this.tabs()[tabIndex];
+    if (tab) {
+      this.router.navigate(['/dashboard', this.dashboardId(), tab.id]);
+    } else {
+      this.router.navigate(['/dashboard', this.dashboardId(), '']);
+    }
   }
 
-  getActiveDashboardTitle() {
+  protected getActiveDashboardTitle(): string {
     return (
       this.store
         .selectSignal(selectDashboardList)()
@@ -102,28 +110,28 @@ export class TabSwitcher implements OnInit {
     );
   }
 
-  onSaveEditDashboardClick() {
-    this.facade.updateDashboard(this.dashboardId() || '');
+  protected onSaveEditDashboardClick(): void {
+    this.facade.updateDashboard(this.dashboardId());
   }
 
-  onDiscardEditDashboardClick() {
-    this.facade.discardChanges(this.dashboardId() || '', this.tabId() || '');
+  protected onDiscardEditDashboardClick(): void {
+    console.log('onDiscardEditDashboardClick', this.dashboardId(), this.tabId());
+    this.facade.discardChanges(this.dashboardId(), this.tabId());
   }
 
-  onReorderTabClick(tabId: string, direction: 'left' | 'right') {
+  protected onReorderTabClick(tabId: string, direction: 'left' | 'right'): void {
     this.facade.reorderTab(tabId, direction);
   }
 
-  onTabTitleChange(tabId: string, event: Event) {
-    const newTitle = (event.target as HTMLInputElement).value;
+  protected onTabTitleChange(tabId: string, newTitle: string): void {
     this.facade.updateTabTitle(tabId, newTitle);
   }
 
-  onRemoveTabClick(tabId: string) {
-    this.facade.removeTab(this.dashboardId() || '', tabId);
+  protected onRemoveTabClick(tabId: string): void {
+    this.facade.removeTab(this.dashboardId(), tabId);
   }
 
-  onAddTabClick() {
+  protected onAddTabClick(): void {
     this.facade.addTab('newTab');
     this.selectTab(this.tabs().length - 1);
   }

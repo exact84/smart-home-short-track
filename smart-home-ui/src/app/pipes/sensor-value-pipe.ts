@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'sensorValuePipe',
 })
 export class SensorValuePipe implements PipeTransform {
-  transform(value: { amount: number; unit: string }): string {
+  public transform(value: { amount: number; unit: string }): string {
     if (!value || value.amount === undefined) {
       return ' - ';
     }

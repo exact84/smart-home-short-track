@@ -18,25 +18,25 @@ import { AddDashboard } from './add-dashboard/add-dashboard';
   styleUrl: './menu.scss',
 })
 export class Menu {
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  store = inject(Store);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly store = inject(Store);
   public dashboardList$ = this.store.select(selectDashboardList);
   public loading$ = this.store.select((state) => state.dashboardList.loading);
   public error$ = this.store.select((state) => state.dashboardList.error);
   private tabs: Tab[] = [];
-  dashboardData = toSignal(this.store.select(selectDashboardDataState));
+  private dashboardData = toSignal(this.store.select(selectDashboardDataState));
 
-  currentDashboardId = toSignal(
+  private currentDashboardId = toSignal(
     this.route.children[0].paramMap.pipe(
       map((parameters) => parameters.get('dashboardId')),
       filter((id) => id !== null),
     ),
   );
 
-  onDashboardClick(dashboardId: string) {
+  protected onDashboardClick(dashboardId: string): void {
     if (dashboardId === this.currentDashboardId()) return;
-    console.log(dashboardId, this.currentDashboardId(), this.dashboardData()?.tabs);
+    console.log(dashboardId, this.currentDashboardId());
 
     let tabId = '';
     if (this.tabs.length > 0) tabId = this.dashboardData()?.tabs[0].id || '';

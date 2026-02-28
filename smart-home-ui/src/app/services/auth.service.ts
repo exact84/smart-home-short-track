@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { TokenService } from './token.service';
-import { catchError, finalize, switchMap, tap, throwError } from 'rxjs';
+import { catchError, finalize, Observable, switchMap, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '../models/user.model';
 
@@ -16,7 +16,7 @@ export class AuthService {
   private router = inject(Router);
   public isLoggedIn = computed(() => !!this.currentUser());
 
-  public login(credentials: { userName: string; password: string }) {
+  public login(credentials: { userName: string; password: string }): Observable<User> {
     const { userName, password } = credentials;
     const body = { userName, password };
     return this.http.post<{ token: string }>('user/login', body).pipe(
@@ -26,7 +26,7 @@ export class AuthService {
     );
   }
 
-  public loadUserData(token: string) {
+  public loadUserData(token: string): Observable<User> {
     this.loading.set(true);
     return this.http
       .get<User>('user/profile', { headers: { Authorization: `Bearer ${token}` } })
@@ -43,7 +43,7 @@ export class AuthService {
       );
   }
 
-  public logout() {
+  public logout(): void {
     this.tokenService.deleteToken();
     this.currentUser.set(undefined);
     this.router.navigate(['login']);

@@ -10,7 +10,7 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class Footer {
   public authService = inject(AuthService);
-  onLogout() {
+  protected onLogout(): void {
     this.authService.logout();
   }
 }
