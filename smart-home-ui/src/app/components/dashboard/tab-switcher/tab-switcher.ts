@@ -41,7 +41,7 @@ export class TabSwitcher implements OnInit {
     { initialValue: '' },
   );
 
-  private tabId = toSignal(
+  protected tabId = toSignal(
     this.route.paramMap.pipe(map((parameters) => parameters.get('tabId') || '')),
     { initialValue: '' },
   );

@@ -33,8 +33,8 @@
           <b>{{ getActiveDashboardTitle() }}</b>
         </div>
         <div class="buttons">
-          <button mat-button class="button" (click)="onDiscardEditDashboardClick()">discard</button>
-          <button mat-button class="button" (click)="onSaveEditDashboardClick()">save</button>
+          <button class="button" (click)="onDiscardEditDashboardClick()">discard</button>
+          <button class="button" (click)="onSaveEditDashboardClick()">save</button>
         </div>
       </div>
       <div class="header-down">
@@ -49,6 +49,7 @@
                   [disabled]="$index === 0"
                   class="mat-button"
                   (click)="onReorderTabClick(tab.id, 'left')"
+                  title="move left"
                 >
                   <mat-icon>arrow_back</mat-icon>
                 </button>
@@ -56,18 +57,20 @@
                   <input
                     matInput
                     #titleInput
+                    id="title"
                     [value]="tab.title"
                     (input)="onTabTitleChange(tab.id, titleInput.value)"
                     maxlength="20"
                   />
                 </div>
-                <button class="mat-button" (click)="onRemoveTabClick(tab.id)">
+                <button class="mat-button" title="remove tab" (click)="onRemoveTabClick(tab.id)">
                   <mat-icon>clear</mat-icon>
                 </button>
                 <button
                   [disabled]="$index === tabs()!.length - 1"
                   class="mat-button"
                   (click)="onReorderTabClick(tab.id, 'right')"
+                  title="move right"
                 >
                   <mat-icon>arrow_forward</mat-icon>
                 </button>
@@ -75,7 +78,7 @@
             </mat-tab>
           }
         </mat-tab-group>
-        <button class="add-button" (click)="onAddTabClick()">
+        <button class="add-button mat-button" title="add new tab" (click)="onAddTabClick()">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -83,4 +86,4 @@
   }
 </div>
 
-<app-card-list [cards]="cards()"></app-card-list>
+<app-card-list [tabId]="tabId()" [cards]="cards()"></app-card-list>

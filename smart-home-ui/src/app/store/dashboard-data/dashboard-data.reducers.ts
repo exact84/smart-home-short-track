@@ -1,11 +1,14 @@
 import { createReducer, on } from '@ngrx/store';
 import { DashboardData } from '../../models';
 import {
+  addCard,
   addTab,
   dashboardDataLoaded,
   dashboardDataLoadFailed,
   loadDashboardData,
+  removeCard,
   removeTab,
+  reorderCard,
   reorderTab,
   saveDashboardData,
   saveDashboardDataFailure,
@@ -118,6 +121,54 @@ export const dashboardDataReducer = createReducer(
       ...state,
       loading: false,
       error,
+    };
+  }),
+
+  on(addCard, (state, { tabId, card }) => ({
+    ...state,
+    dashboard: {
+      ...state.dashboard,
+      tabs: state.dashboard!.tabs.map((tab) => {
+        if (tab.id === tabId) {
+          return {
+            ...tab,
+            cards: [...tab.cards, card],
+          };
+        }
+        return tab;
+      }),
+    },
+  })),
+
+  on(removeCard, (state, { tabId, cardId }) => ({
+    ...state,
+    dashboard: {
+      ...state.dashboard,
+      tabs: state.dashboard!.tabs.map((tab) => {
+        return tab.id === tabId
+          ? { ...tab, cards: tab.cards.filter((card) => card.id !== cardId) }
+          : tab;
+      }),
+    },
+  })),
+
+  on(reorderCard, (state, { tabId, cardId, direction }) => {
+    const cards = [...state.dashboard!.tabs.find((tab) => tab.id === tabId)!.cards];
+    const index = cards.findIndex((card) => card.id === cardId);
+
+    const newIndex = direction === 'left' ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= cards.length) return state;
+
+    [cards[index], cards[newIndex]] = [cards[newIndex], cards[index]];
+
+    return {
+      ...state,
+      dashboard: {
+        ...state.dashboard,
+        tabs: state.dashboard!.tabs.map((tab) => {
+          return tab.id === tabId ? { ...tab, cards } : tab;
+        }),
+      },
     };
   }),
 );

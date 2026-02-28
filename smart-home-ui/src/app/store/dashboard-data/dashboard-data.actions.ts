@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { DashboardData } from '../../models';
+import { CardInfo, DashboardData } from '../../models';
 
 export const loadDashboardData = createAction(
   '[DashboardData] Load Dashboard Data',
@@ -37,13 +37,33 @@ export const updateTabTitle = createAction(
 );
 
 export const saveDashboardData = createAction(
-  '[Dashboard] Save Dashboard Data',
+  '[DashboardData] Save Dashboard Data',
   props<{ dashboardId: string }>(),
 );
 
 export const saveDashboardDataSuccess = createAction('[Dashboard] Save Dashboard Data Success');
 
 export const saveDashboardDataFailure = createAction(
-  '[Dashboard] Save Dashboard Data Failure',
+  '[DashboardData] Save Dashboard Data Failure',
   props<{ error: string }>(),
+);
+
+export const addCard = createAction(
+  '[DashboardData] Add Card',
+  props<{ tabId: string; card: CardInfo }>(),
+);
+
+export const removeCard = createAction(
+  '[DashboardData] Remove Card',
+  props<{ tabId: string; cardId: string }>(),
+);
+
+export const updateCard = createAction(
+  '[DashboardData] Update Card',
+  props<{ tabId: string; card: CardInfo }>(),
+);
+
+export const reorderCard = createAction(
+  '[DashboardData] Reorder Card',
+  props<{ tabId: string; cardId: string; direction: 'left' | 'right' }>(),
 );

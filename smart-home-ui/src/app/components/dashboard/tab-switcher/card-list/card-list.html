@@ -1,3 +1,12 @@
-@for (card of cards(); track card.id) {
-  <app-card [appHighlightDirective]="hasActiveDevice(card)" [card]="card"></app-card>
+<div class="card-list">
+  @for (card of cards(); track card.id) {
+    <app-card
+      [appHighlightDirective]="hasActiveDevice(card)"
+      [tabId]="tabId()"
+      [card]="card"
+    ></app-card>
+  }
+</div>
+@if (editMode()) {
+  <button mat-flat-button (click)="openDialog()">+ Add Card</button>
 }

@@ -45,3 +45,21 @@
     </div>
   }
 }
+
+@if (editMode()) {
+  <div>
+    <mat-divider></mat-divider>
+    <div class="controls">
+      <button mat-icon-button (click)="onMoveCardClick(card()!.id, 'left')">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button mat-button (click)="onEditCardClick()">Edit Card</button>
+      <button mat-icon-button (click)="onDeleteCardClick(card()!.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button (click)="onMoveCardClick(card()!.id, 'right')">
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+}

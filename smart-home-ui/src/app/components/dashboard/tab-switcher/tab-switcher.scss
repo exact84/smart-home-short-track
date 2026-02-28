@@ -95,23 +95,35 @@
 }
 
 .button {
-  color: white;
+  border: solid 1px white; //var(--toggle-color);
+  color: white; //var(--toggle-color);
   margin-left: 10px;
-  border: solid 1px;
   border-radius: 4px;
+  padding: 4px 10px;
   margin: 6px 6px;
   height: 24px;
 }
 
 .button:hover {
-  border: solid 1px white; //var(--toggle-color);
-  color: white; //var(--toggle-color);
+  border: solid 1px var(--toggle-color);
+  color: var(--toggle-color);
 }
 
 button:disabled {
   cursor: not-allowed;
 }
 
-// .mat-mdc-tab-header {
-//   overflow: visible;
-// }
+.mat-button {
+  border: solid 1px;
+}
+
+@media (hover: hover) {
+  .mat-button:hover {
+    border: solid 1px var(--toggle-color);
+    color: var(--toggle-color);
+  }
+}
+
+input {
+  padding: 4px;
+}

@@ -1,14 +1,19 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
+  addCard,
   addTab,
   loadDashboardData,
+  removeCard,
   removeTab,
+  reorderCard,
   reorderTab,
   saveDashboardData,
+  updateCard,
   updateTabTitle,
 } from './dashboard-data.actions';
 import { generateId } from '../../utils/generate-id';
+import { CardInfo } from '../../models';
 
 @Injectable({
   providedIn: 'root',
@@ -50,5 +55,25 @@ export class DashboardFacade {
 
   public updateTabTitle(tabId: string, title: string): void {
     this.store.dispatch(updateTabTitle({ tabId, title }));
+  }
+
+  public addCard(tabId: string, card: CardInfo): void {
+    console.log('Facade addCard:', tabId, card);
+    this.store.dispatch(addCard({ tabId, card }));
+  }
+
+  public removeCard(tabId: string, cardId: string): void {
+    console.log('Facade removeCard:', tabId, cardId);
+    this.store.dispatch(removeCard({ tabId, cardId }));
+  }
+
+  public updateCard(tabId: string, card: CardInfo): void {
+    console.log('Facade updateCard:', tabId, card);
+    this.store.dispatch(updateCard({ tabId, card }));
+  }
+
+  public reorderCard(tabId: string, cardId: string, direction: 'left' | 'right'): void {
+    console.log('Facade reorderCard:', tabId, cardId, direction);
+    this.store.dispatch(reorderCard({ tabId, cardId, direction }));
   }
 }
