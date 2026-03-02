@@ -38,8 +38,3 @@ export const deleteDashboardFailed = createAction(
   '[DashboardList] Delete Dashboard Failed',
   props<{ dashboard: DashboardListItem; error: string }>(),
 );
-
-// export const selectDashboard = createAction(
-//   '[DashboardList] Select Dashboard',
-//   props<{ dashboardId: string }>(),
-// );

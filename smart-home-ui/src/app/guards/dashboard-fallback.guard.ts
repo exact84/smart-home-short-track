@@ -26,8 +26,6 @@ export const dashboardFallbackGuard: CanActivateFn = (route) => {
     take(1),
     map(([list]) => {
       if (list.length === 0 || list.some((d) => d.id === dashboardId)) return true;
-
-      console.log('dashboard не найден', list[0].id);
       return router.createUrlTree(['/dashboard', list[0].id]);
     }),
     catchError((error) => {

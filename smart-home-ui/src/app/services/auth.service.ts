@@ -35,7 +35,6 @@ export class AuthService {
           this.currentUser.set(response);
         }),
         catchError((error) => {
-          console.log(error);
           this.tokenService.deleteToken();
           return throwError(() => error);
         }),

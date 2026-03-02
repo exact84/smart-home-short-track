@@ -51,7 +51,6 @@ export class TabSwitcher implements OnInit {
 
   public cards = computed<CardInfo[]>(() => {
     const tabs = this.tabs();
-    // console.log('cards changed', this.currentTabIndex(), tabs[this.currentTabIndex()]);
     const tab = tabs[this.currentTabIndex()];
     return tab?.cards ?? [];
   });
@@ -63,13 +62,6 @@ export class TabSwitcher implements OnInit {
 
   public ngOnInit(): void {
     const id = this.dashboardId();
-    console.log(
-      'from tab-switcher',
-      this.dashboard(),
-      this.tabs(),
-      this.tabId(),
-      this.currentTabIndex(),
-    );
     if (id) this.store.dispatch(loadDashboardData({ dashboardId: id, tabId: this.tabId() }));
   }
 
@@ -115,7 +107,6 @@ export class TabSwitcher implements OnInit {
   }
 
   protected onDiscardEditDashboardClick(): void {
-    console.log('onDiscardEditDashboardClick', this.dashboardId(), this.tabId());
     this.facade.discardChanges(this.dashboardId(), this.tabId());
   }
 

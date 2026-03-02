@@ -36,7 +36,6 @@ export class Menu {
 
   protected onDashboardClick(dashboardId: string): void {
     if (dashboardId === this.currentDashboardId()) return;
-    console.log(dashboardId, this.currentDashboardId());
 
     let tabId = '';
     if (this.tabs.length > 0) tabId = this.dashboardData()?.tabs[0].id || '';

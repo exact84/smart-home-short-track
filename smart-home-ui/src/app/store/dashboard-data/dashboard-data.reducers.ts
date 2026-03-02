@@ -13,6 +13,7 @@ import {
   saveDashboardData,
   saveDashboardDataFailure,
   saveDashboardDataSuccess,
+  updateCard,
   updateTabTitle,
 } from './dashboard-data.actions';
 
@@ -50,7 +51,6 @@ export const dashboardDataReducer = createReducer(
   }),
 
   on(dashboardDataLoadFailed, (state, { error }) => {
-    console.log('from reducer:', error);
     return {
       ...state,
       loading: false,
@@ -116,7 +116,6 @@ export const dashboardDataReducer = createReducer(
   })),
 
   on(saveDashboardDataFailure, (state, { error }) => {
-    console.log('from reducer:', error);
     return {
       ...state,
       loading: false,
@@ -169,6 +168,23 @@ export const dashboardDataReducer = createReducer(
           return tab.id === tabId ? { ...tab, cards } : tab;
         }),
       },
+    };
+  }),
+
+  on(updateCard, (state, { tabId, updatedCard }) => {
+    const tabs = state.dashboard!.tabs.map((tab) =>
+      tab.id === tabId
+        ? {
+            ...tab,
+            cards: tab.cards.map((card) =>
+              card.id === updatedCard.id ? { ...card, ...updatedCard } : card,
+            ),
+          }
+        : tab,
+    );
+    return {
+      ...state,
+      dashboard: { ...state.dashboard!, tabs },
     };
   }),
 );

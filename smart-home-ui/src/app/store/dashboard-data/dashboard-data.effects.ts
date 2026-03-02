@@ -32,7 +32,6 @@ export class DashboardDataEffects {
       switchMap(({ dashboardId, tabId }) =>
         this.storeService.getDashboardData(dashboardId).pipe(
           map((dashboard) => {
-            console.log('from effect:', dashboardId, tabId);
             return dashboardDataLoaded({ dashboard, dashboardId, tabId });
           }),
           catchError((error) => of(dashboardDataLoadFailed({ error }))),
@@ -46,7 +45,6 @@ export class DashboardDataEffects {
       this.actions$.pipe(
         ofType(dashboardDataLoaded),
         tap(({ dashboard, dashboardId, tabId }) => {
-          console.log('navigation effect:', dashboard);
           if (dashboard.tabs.length > 0 && (!tabId || !dashboard.tabs.some((t) => t.id === tabId)))
             tabId = dashboard.tabs[0].id;
           this.router.navigate(['dashboard', dashboardId, tabId]);
@@ -64,7 +62,6 @@ export class DashboardDataEffects {
           const remaining = dashboard?.tabs.filter((t) => t.id !== tabId) || [];
           let newTabId = '';
           if (remaining.length > 0) newTabId = remaining[0].id;
-          console.log('removeTab effect:', dashboardId, newTabId);
           this.router.navigate(['dashboard', dashboardId, newTabId], {
             replaceUrl: true,
           });
@@ -90,7 +87,6 @@ export class DashboardDataEffects {
       this.actions$.pipe(
         ofType(saveDashboardDataSuccess),
         tap(() => {
-          console.log('saveDashboardDataSuccess effect');
           this.facade.toggleEditMode();
         }),
       ),

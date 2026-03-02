@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { DashboardData, Tab } from '../models';
+import { DashboardData, DeviceItem, SensorItem, Tab } from '../models';
 import { DashboardListItem } from '../models/dashboard-list.model';
 import { Observable } from 'rxjs';
 
@@ -10,8 +10,6 @@ import { Observable } from 'rxjs';
 export class DataStoreService {
   private readonly http = inject(HttpClient);
   private readonly _tabs = signal<Tab[]>([]);
-  // public tabs = this._tabs.asReadonly();
-  // public dashboardList = signal<DashboardListItem[]>([]);
   public currentDashboardId = signal<string | undefined>(undefined);
   public currentTabId = signal<string | undefined>(undefined);
   public currentTabIndex = signal(0);
@@ -37,6 +35,16 @@ export class DataStoreService {
     dashboard: DashboardData,
   ): Observable<DashboardData> {
     return this.http.put<DashboardData>(`dashboards/${dashboardId}`, dashboard);
+  }
+
+  public getAllItemList(): Observable<(DeviceItem | SensorItem)[]> {
+    return this.http.get<(DeviceItem | SensorItem)[]>(`devices`);
+  }
+
+  public updateItemState(id: string, state: boolean): Observable<DeviceItem | SensorItem> {
+    return this.http.patch<DeviceItem | SensorItem>(`devices/${id}`, {
+      state,
+    });
   }
 
   public toggleDevice(cardId: string, deviceLabel: string, state?: boolean): void {

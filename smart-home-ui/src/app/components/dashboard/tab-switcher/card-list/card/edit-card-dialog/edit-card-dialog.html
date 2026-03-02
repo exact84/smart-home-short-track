@@ -1,1 +1,52 @@
-<p>edit-card-dialog works!</p>
+<h2 mat-dialog-title>Entities card configuration</h2>
+
+<mat-dialog-content>
+  <mat-label>Card Title:</mat-label>
+
+  <div class="entity-item">
+    <mat-form-field appearance="fill" class="card-title">
+      <input matInput [(ngModel)]="cardCopy.title" placeholder="Card Title" maxlength="50" />
+    </mat-form-field>
+  </div>
+
+  <mat-label>Entities:</mat-label>
+
+  <div class="entity-list">
+    @for (item of cardCopy.items; track $index) {
+      <div class="entity-item">
+        <mat-form-field appearance="fill">
+          <mat-icon matPrefix>{{ item.icon }}</mat-icon>
+          <input name="name" matInput [(ngModel)]="item.label" placeholder="Name" />
+        </mat-form-field>
+        <button mat-icon-button color="warn" (click)="removeItem($index)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    }
+
+    @if (cardCopy.layout !== CardLayout.SingleDevice || cardCopy.items.length === 0) {
+      <div class="item-row">
+        <mat-form-field appearance="fill" class="item-input">
+          <mat-select [(ngModel)]="newItemId" placeholder="Select Item">
+            @for (item of items; track $index) {
+              <mat-option [value]="item.id">
+                <mat-icon>{{ item.icon }}</mat-icon>
+                {{ item.label }} ({{ item.type }})
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-icon-button color="primary" (click)="addItem()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+  <div class="error">{{ itemListError() }}</div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>

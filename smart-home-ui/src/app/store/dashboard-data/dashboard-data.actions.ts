@@ -60,7 +60,7 @@ export const removeCard = createAction(
 
 export const updateCard = createAction(
   '[DashboardData] Update Card',
-  props<{ tabId: string; card: CardInfo }>(),
+  props<{ tabId: string; updatedCard: CardInfo }>(),
 );
 
 export const reorderCard = createAction(

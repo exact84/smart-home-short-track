@@ -10,13 +10,19 @@ import { dashboardListReducer } from './store/dashboard-list/dashboard.reducers'
 import { DashboardEffects } from './store/dashboard-list/dashboard.effects';
 import { DashboardDataEffects } from './store/dashboard-data/dashboard-data.effects';
 import { dashboardDataReducer } from './store/dashboard-data/dashboard-data.reducers';
+import { ItemListEffects } from './store/item-list/item-list.effects';
+import { itemListReducer } from './store/item-list/item-list.reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
-    provideStore({ dashboardList: dashboardListReducer, dashboardData: dashboardDataReducer }),
-    provideEffects(DashboardEffects, DashboardDataEffects),
+    provideStore({
+      dashboardList: dashboardListReducer,
+      dashboardData: dashboardDataReducer,
+      itemList: itemListReducer,
+    }),
+    provideEffects(DashboardEffects, DashboardDataEffects, ItemListEffects),
   ],
 };

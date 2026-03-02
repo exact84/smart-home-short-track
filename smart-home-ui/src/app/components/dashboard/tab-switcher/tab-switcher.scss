@@ -15,12 +15,7 @@
 
 .tabs {
   display: flex;
-  // flex: 1 1 auto;
   min-width: 0;
-  // display: flex;
-  // flex-direction: row;
-  // width: 100%;
-  // padding: 4px;
 }
 
 .tab {
@@ -56,7 +51,7 @@
 
 .icon:hover {
   background-color: var(--bg-hover-color);
-  color: var(--toggle-color); //rgb(84, 207, 255);
+  color: var(--toggle-color);
   cursor: pointer;
 }
 
@@ -92,11 +87,12 @@
   flex-direction: row;
   align-self: flex-end;
   height: fit-content;
+  padding-bottom: 3px;
 }
 
 .button {
-  border: solid 1px white; //var(--toggle-color);
-  color: white; //var(--toggle-color);
+  border: solid 1px white;
+  color: white;
   margin-left: 10px;
   border-radius: 4px;
   padding: 4px 10px;

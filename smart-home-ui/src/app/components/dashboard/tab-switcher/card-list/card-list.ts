@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { CardInfo, DeviceItem } from '../../../../models';
 import { Card } from './card/card';
 import { HighlightDirective } from '../../../../directives/highlight';
@@ -6,6 +6,7 @@ import { DashboardFacade } from '../../../../store/dashboard-data/dashboard-data
 import { MatDialog } from '@angular/material/dialog';
 import { AddCardDialog } from './add-card-dialog/add-card-dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { ItemListFacade } from '../../../../store/item-list/item-list.facade';
 
 @Component({
   selector: 'app-card-list',
@@ -13,20 +14,24 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './card-list.html',
   styleUrl: './card-list.scss',
 })
-export class CardList {
+export class CardList implements OnInit {
   public tabId = input<string>('');
   public cards = input<CardInfo[]>();
   protected readonly editMode = inject(DashboardFacade).editMode;
   private readonly dialog = inject(MatDialog);
-  private facade = inject(DashboardFacade);
+  private dashboardFacade = inject(DashboardFacade);
+  private itemListFacade = inject(ItemListFacade);
+
+  public ngOnInit(): void {
+    this.itemListFacade.loadItemList();
+  }
 
   protected openDialog(): void {
     const reference = this.dialog.open(AddCardDialog, {
       width: '500px',
     });
     reference.afterClosed().subscribe((layout) => {
-      // можно тут создавать карточку
-      this.facade.addCard(this.tabId() || '', {
+      this.dashboardFacade.addCard(this.tabId() || '', {
         id: crypto.randomUUID(),
         title: 'New Card',
         layout,

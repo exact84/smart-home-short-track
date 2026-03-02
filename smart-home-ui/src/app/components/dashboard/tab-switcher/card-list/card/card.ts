@@ -1,16 +1,17 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { CardInfo, CardLayout } from '../../../../../models';
+import { CardInfo, CardLayout, DeviceItem } from '../../../../../models';
 import { Device } from './device/device';
 import { Sensor } from './sensor/sensor';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
-import { DataStoreService } from '../../../../../services/data-store.service';
 import { DashboardFacade } from '../../../../../store/dashboard-data/dashboard-data.facade';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { Overlay } from '@angular/cdk/overlay';
 import { EditCardDialog } from './edit-card-dialog/edit-card-dialog';
+import { ItemListFacade } from '../../../../../store/item-list/item-list.facade';
+import { DataStoreService } from '../../../../../services/data-store.service';
 
 @Component({
   selector: 'app-card',
@@ -40,6 +41,17 @@ export class Card {
     this.devices().some((device) => device.state),
   );
   private readonly dataStore = inject(DataStoreService);
+  private readonly itemListFacade: ItemListFacade = inject(ItemListFacade);
+  private readonly itemList = this.itemListFacade.itemList;
+
+  protected readonly deviceItems = computed(() => {
+    const card = this.card();
+    const items = this.itemList();
+    if (!card || !card.items) return [];
+    return items.filter((item): item is DeviceItem =>
+      card.items?.some((c) => c.id === item.id && item.type === 'device'),
+    );
+  });
 
   public status(): string {
     return this.devices()[0]?.state ? 'On' : 'Off';
@@ -66,13 +78,12 @@ export class Card {
       panelClass: 'dialog-container',
       disableClose: true,
       scrollStrategy: this.overlay.scrollStrategies.noop(),
-      data: { card: this.card },
+      data: { card: this.card() },
     });
 
     reference.afterClosed().subscribe((updatedCard: CardInfo | undefined) => {
       if (updatedCard) {
         this.facade.updateCard(this.tabId(), updatedCard);
-        // this.cardSignal.set(updatedCard);
       }
     });
   }

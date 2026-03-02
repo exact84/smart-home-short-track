@@ -14,7 +14,6 @@ export class AddCardDialog {
   private dialogRef = inject(MatDialogRef<AddCardDialog>);
 
   protected readonly CardLayout = CardLayout;
-  // protected layout: CardLayout | undefined;
 
   protected close(layout?: CardLayout): void {
     this.dialogRef.close(layout);

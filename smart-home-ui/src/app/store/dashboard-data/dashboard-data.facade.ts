@@ -58,22 +58,18 @@ export class DashboardFacade {
   }
 
   public addCard(tabId: string, card: CardInfo): void {
-    console.log('Facade addCard:', tabId, card);
     this.store.dispatch(addCard({ tabId, card }));
   }
 
   public removeCard(tabId: string, cardId: string): void {
-    console.log('Facade removeCard:', tabId, cardId);
     this.store.dispatch(removeCard({ tabId, cardId }));
   }
 
-  public updateCard(tabId: string, card: CardInfo): void {
-    console.log('Facade updateCard:', tabId, card);
-    this.store.dispatch(updateCard({ tabId, card }));
+  public updateCard(tabId: string, updatedCard: CardInfo): void {
+    this.store.dispatch(updateCard({ tabId, updatedCard }));
   }
 
   public reorderCard(tabId: string, cardId: string, direction: 'left' | 'right'): void {
-    console.log('Facade reorderCard:', tabId, cardId, direction);
     this.store.dispatch(reorderCard({ tabId, cardId, direction }));
   }
 }
