@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Overlay } from '@angular/cdk/overlay';
 import { EditCardDialog } from './edit-card-dialog/edit-card-dialog';
 import { ItemListFacade } from '../../../../../store/item-list/item-list.facade';
-import { DataStoreService } from '../../../../../services/data-store.service';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-card',
@@ -23,6 +23,7 @@ export class Card {
   public tabId = input<string>('');
   public card = input<CardInfo>();
 
+  private readonly store = inject(Store);
   private readonly facade = inject(DashboardFacade);
   public editMode = this.facade.editMode;
   private dialog: MatDialog = inject(MatDialog);
@@ -38,9 +39,8 @@ export class Card {
   );
   public hasToggle = computed(() => this.devices().length > 1);
   protected readonly isMasterToggleOn = computed(() =>
-    this.devices().some((device) => device.state),
+    this.deviceItems().some((device) => device.state),
   );
-  private readonly dataStore = inject(DataStoreService);
   private readonly itemListFacade: ItemListFacade = inject(ItemListFacade);
   private readonly itemList = this.itemListFacade.itemList;
 
@@ -54,16 +54,13 @@ export class Card {
   });
 
   public status(): string {
-    return this.devices()[0]?.state ? 'On' : 'Off';
+    return this.deviceItems()[0]?.state ? 'On' : 'Off';
   }
 
-  protected toggleAll(): void {
-    for (const device of this.devices()) {
-      this.dataStore.toggleDevice(
-        this.card()?.id ?? '',
-        device.label ?? '',
-        !this.isMasterToggleOn(),
-      );
+  protected toggleAll(state: boolean): void {
+    for (const device of this.deviceItems()) {
+      if (!device.id) continue;
+      this.itemListFacade.toggleItemState(device.id, state);
     }
   }
 

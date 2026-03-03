@@ -2,7 +2,10 @@
   <h3 class="card-title">{{ card()?.title }}</h3>
 
   @if (hasToggle()) {
-    <mat-slide-toggle [checked]="isMasterToggleOn()" (change)="toggleAll()"></mat-slide-toggle>
+    <mat-slide-toggle
+      [checked]="isMasterToggleOn()"
+      (change)="toggleAll($event.checked)"
+    ></mat-slide-toggle>
   }
 </div>
 
@@ -14,7 +17,11 @@
           <app-sensor [item]="item" [layout]="card()?.layout"></app-sensor>
         }
         @if (item.type === 'device') {
-          <app-device [item]="item" [cardId]="card()?.id" [layout]="card()?.layout"></app-device>
+          <app-device
+            [itemId]="item.id"
+            [cardId]="card()?.id"
+            [layout]="card()?.layout"
+          ></app-device>
           <div>{{ status() }}</div>
         }
       }
@@ -27,7 +34,7 @@
           <app-sensor [item]="item" [layout]="card()?.layout"></app-sensor>
         }
         @if (item.type === 'device') {
-          <app-device [item]="item" [layout]="card()?.layout"></app-device>
+          <app-device [itemId]="item.id" [layout]="card()?.layout"></app-device>
         }
       }
     </div>
@@ -39,7 +46,11 @@
           <app-sensor [item]="item" [layout]="card()?.layout"></app-sensor>
         }
         @if (item.type === 'device') {
-          <app-device [item]="item" [cardId]="card()?.id" [layout]="card()?.layout"></app-device>
+          <app-device
+            [itemId]="item.id"
+            [cardId]="card()?.id"
+            [layout]="card()?.layout"
+          ></app-device>
         }
       }
     </div>

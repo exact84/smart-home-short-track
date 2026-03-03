@@ -36,3 +36,13 @@
   flex-direction: column;
   gap: 10px;
 }
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.controls button:hover {
+  color: var(--toggle-color);
+}

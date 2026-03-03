@@ -35,14 +35,14 @@ export class ItemListEffects {
       mergeMap(({ itemId, newState }) =>
         this.dashboardService.updateItemState(itemId, newState).pipe(
           map(() => toggleItemStateSuccess({ itemId, newState })),
-          catchError(() =>
-            of(
+          catchError(() => {
+            return of(
               toggleItemStateRevert({
                 itemId,
                 prevState: !newState,
               }),
-            ),
-          ),
+            );
+          }),
         ),
       ),
     ),
