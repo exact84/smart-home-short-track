@@ -32,9 +32,12 @@
         <div class="dashboard-title">
           <b>{{ getActiveDashboardTitle() }}</b>
         </div>
+        <div class="error">{{ error() }}</div>
         <div class="buttons">
           <button class="button" (click)="onDiscardEditDashboardClick()">discard</button>
-          <button class="button" (click)="onSaveEditDashboardClick()">save</button>
+          <button class="button" (click)="onSaveEditDashboardClick()" [disabled]="error()">
+            save
+          </button>
         </div>
       </div>
       <div class="header-down">
@@ -61,6 +64,7 @@
                     [value]="tab.title"
                     (input)="onTabTitleChange(tab.id, titleInput.value)"
                     maxlength="20"
+                    [class.invalid]="!!error()"
                   />
                 </div>
                 <button class="mat-button" title="remove tab" (click)="onRemoveTabClick(tab.id)">

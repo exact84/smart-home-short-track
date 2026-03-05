@@ -17,6 +17,11 @@
   background-color: var(--bg-color);
 }
 
+span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media (hover: hover) {
   .menuitem:hover {
     background-color: var(--bg-header-color);

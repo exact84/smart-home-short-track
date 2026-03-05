@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CardList } from './card-list/card-list';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -59,6 +59,7 @@ export class TabSwitcher implements OnInit {
 
   private dialog = inject(MatDialog);
   protected emptyTabMessage = emptyTabMessage;
+  protected error = signal('');
 
   public ngOnInit(): void {
     const id = this.dashboardId();
@@ -115,7 +116,9 @@ export class TabSwitcher implements OnInit {
   }
 
   protected onTabTitleChange(tabId: string, newTitle: string): void {
-    this.facade.updateTabTitle(tabId, newTitle);
+    this.error.set('');
+    const result = this.facade.updateTabTitle(tabId, newTitle);
+    if (!result) this.error.set('Tab title already exists');
   }
 
   protected onRemoveTabClick(tabId: string): void {

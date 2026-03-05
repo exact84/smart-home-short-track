@@ -123,3 +123,13 @@ button:disabled {
 input {
   padding: 4px;
 }
+
+.error {
+  color: rgb(87, 0, 0);
+  font-weight: 900;
+}
+
+.invalid {
+  border: solid 1px red;
+  color: red;
+}

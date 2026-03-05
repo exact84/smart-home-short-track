@@ -14,6 +14,7 @@ import {
 } from './dashboard-data.actions';
 import { generateId } from '../../utils/generate-id';
 import { CardInfo } from '../../models';
+import { selectDashboardDataState } from './dashboard-data.selectors';
 
 @Injectable({
   providedIn: 'root',
@@ -22,16 +23,14 @@ export class DashboardFacade {
   private store = inject(Store);
 
   public editMode = signal(false);
-  public newTabMode = signal(false);
+  private readonly dashboardData = this.store.selectSignal(selectDashboardDataState);
 
   public discardChanges(dashboardId: string, tabId: string): void {
     this.editMode.set(false);
-    this.newTabMode.set(false);
     this.store.dispatch(loadDashboardData({ dashboardId, tabId }));
   }
 
   public updateDashboard(dashboardId: string): void {
-    this.newTabMode.set(false);
     this.store.dispatch(saveDashboardData({ dashboardId }));
   }
 
@@ -40,9 +39,8 @@ export class DashboardFacade {
   }
 
   public addTab(title: string): void {
-    this.newTabMode.set(true);
     const tabId = generateId(title);
-    this.store.dispatch(addTab({ tabId, title }));
+    this.store.dispatch(addTab({ tabId, title: tabId }));
   }
 
   public removeTab(dashboardId: string, tabId: string): void {
@@ -53,8 +51,15 @@ export class DashboardFacade {
     this.store.dispatch(reorderTab({ tabId, direction }));
   }
 
-  public updateTabTitle(tabId: string, title: string): void {
+  public updateTabTitle(tabId: string, title: string): boolean {
+    const tabs = this.dashboardData()?.tabs;
+
+    const duplicate = tabs?.some((tab) => tab.id !== tabId && tab.title === title);
+
+    if (duplicate) return false;
+
     this.store.dispatch(updateTabTitle({ tabId, title }));
+    return true;
   }
 
   public addCard(tabId: string, card: CardInfo): void {
