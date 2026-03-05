@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 2px;
+}
+
+.card-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+button {
+  width: fit-content;
+  margin: 10px;
+}

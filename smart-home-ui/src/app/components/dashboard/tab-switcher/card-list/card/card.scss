@@ -1,0 +1,48 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  border-color: var(--border-color);
+  background-color: var(--bg-color);
+  padding: 14px;
+  margin: 2px;
+  width: fit-content;
+  min-width: 250px;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+  padding-bottom: 6px;
+}
+
+.single-device {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.controls button:hover {
+  color: var(--toggle-color);
+}

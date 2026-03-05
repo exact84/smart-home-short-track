@@ -1,0 +1,135 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.tabs-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(--bg-header-color);
+}
+
+.tabs {
+  display: flex;
+  min-width: 0;
+}
+
+.tab {
+  display: flex;
+  flex-direction: row;
+}
+
+@media (hover: hover) {
+  .tab:hover {
+    border-bottom: 2px solid white;
+  }
+}
+
+@media (max-width: 768px) {
+  .tabs-container {
+    padding-left: 40px;
+  }
+}
+
+.icons {
+  display: flex;
+  flex-direction: row;
+}
+
+.icon {
+  display: flex;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  padding: 5px;
+  align-items: center;
+}
+
+.icon:hover {
+  background-color: var(--bg-hover-color);
+  color: var(--toggle-color);
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.header-up {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: var(--border-color);
+  padding-left: 10px;
+  width: 100%;
+}
+
+.header-down {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--border-color);
+}
+
+.dashboard-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.add-button {
+  display: flex;
+  flex-direction: row;
+  align-self: flex-end;
+  height: fit-content;
+  padding-bottom: 3px;
+}
+
+.button {
+  border: solid 1px white;
+  color: white;
+  margin-left: 10px;
+  border-radius: 4px;
+  padding: 4px 10px;
+  margin: 6px 6px;
+  height: 24px;
+}
+
+.button:hover {
+  border: solid 1px var(--toggle-color);
+  color: var(--toggle-color);
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.mat-button {
+  border: solid 1px;
+}
+
+@media (hover: hover) {
+  .mat-button:hover {
+    border: solid 1px var(--toggle-color);
+    color: var(--toggle-color);
+  }
+}
+
+input {
+  padding: 4px;
+}
+
+.error {
+  color: rgb(87, 0, 0);
+  font-weight: 900;
+}
+
+.invalid {
+  border: solid 1px red;
+  color: red;
+}

@@ -1,0 +1,93 @@
+<div class="tabs-container">
+  @if (!facade.editMode()) {
+    <div class="tabs">
+      @if (loading()) {
+        <div>Loading...</div>
+      } @else {
+        @if (tabs().length === 0) {
+          <div class="empty">{{ emptyTabMessage }}</div>
+        } @else {
+          <mat-tab-group
+            [selectedIndex]="currentTabIndex()"
+            (selectedIndexChange)="selectTab($event)"
+          >
+            @for (tab of tabs(); track $index) {
+              <mat-tab [label]="tab.title"></mat-tab>
+            }
+          </mat-tab-group>
+        }
+      }
+    </div>
+    <div class="icons">
+      <button class="icon" (click)="onEditDashboardClick()">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button class="icon" (click)="onRemoveDashboardClick()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  } @else {
+    <div class="header">
+      <div class="header-up">
+        <div class="dashboard-title">
+          <b>{{ getActiveDashboardTitle() }}</b>
+        </div>
+        <div class="error">{{ error() }}</div>
+        <div class="buttons">
+          <button class="button" (click)="onDiscardEditDashboardClick()">discard</button>
+          <button class="button" (click)="onSaveEditDashboardClick()" [disabled]="error()">
+            save
+          </button>
+        </div>
+      </div>
+      <div class="header-down">
+        <mat-tab-group
+          [selectedIndex]="currentTabIndex()"
+          (selectedIndexChange)="selectTab($event)"
+        >
+          @for (tab of tabs(); track tab.id) {
+            <mat-tab [label]="tab.title">
+              <div class="tab">
+                <button
+                  [disabled]="$index === 0"
+                  class="mat-button"
+                  (click)="onReorderTabClick(tab.id, 'left')"
+                  title="move left"
+                >
+                  <mat-icon>arrow_back</mat-icon>
+                </button>
+                <div class="tab active">
+                  <input
+                    matInput
+                    #titleInput
+                    id="title"
+                    [value]="tab.title"
+                    (input)="onTabTitleChange(tab.id, titleInput.value)"
+                    maxlength="20"
+                    [class.invalid]="!!error()"
+                  />
+                </div>
+                <button class="mat-button" title="remove tab" (click)="onRemoveTabClick(tab.id)">
+                  <mat-icon>clear</mat-icon>
+                </button>
+                <button
+                  [disabled]="$index === tabs()!.length - 1"
+                  class="mat-button"
+                  (click)="onReorderTabClick(tab.id, 'right')"
+                  title="move right"
+                >
+                  <mat-icon>arrow_forward</mat-icon>
+                </button>
+              </div>
+            </mat-tab>
+          }
+        </mat-tab-group>
+        <button class="add-button mat-button" title="add new tab" (click)="onAddTabClick()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+  }
+</div>
+
+<app-card-list [tabId]="tabId()" [cards]="cards()"></app-card-list>

@@ -1,0 +1,76 @@
+<div class="card-header">
+  <h3 class="card-title">{{ card()?.title }}</h3>
+
+  @if (hasToggle()) {
+    <mat-slide-toggle
+      [checked]="isMasterToggleOn()"
+      (change)="toggleAll($event.checked)"
+    ></mat-slide-toggle>
+  }
+</div>
+
+@switch (card()?.layout) {
+  @case (layouts.SingleDevice) {
+    <div class="single-device">
+      @for (item of card()?.items; track $index) {
+        @if (item.type === 'sensor') {
+          <app-sensor [item]="item" [layout]="card()?.layout"></app-sensor>
+        }
+        @if (item.type === 'device') {
+          <app-device
+            [itemId]="item.id"
+            [cardId]="card()?.id"
+            [layout]="card()?.layout"
+          ></app-device>
+          <div>{{ status() }}</div>
+        }
+      }
+    </div>
+  }
+  @case (layouts.Horizontal) {
+    <div class="horizontal">
+      @for (item of card()?.items; track $index) {
+        @if (item.type === 'sensor') {
+          <app-sensor [item]="item" [layout]="card()?.layout"></app-sensor>
+        }
+        @if (item.type === 'device') {
+          <app-device [itemId]="item.id" [layout]="card()?.layout"></app-device>
+        }
+      }
+    </div>
+  }
+  @case (layouts.Vertical) {
+    <div class="vertical">
+      @for (item of card()?.items; track $index) {
+        @if (item.type === 'sensor') {
+          <app-sensor [item]="item" [layout]="card()?.layout"></app-sensor>
+        }
+        @if (item.type === 'device') {
+          <app-device
+            [itemId]="item.id"
+            [cardId]="card()?.id"
+            [layout]="card()?.layout"
+          ></app-device>
+        }
+      }
+    </div>
+  }
+}
+
+@if (editMode()) {
+  <div>
+    <mat-divider></mat-divider>
+    <div class="controls">
+      <button mat-icon-button (click)="onMoveCardClick(card()!.id, 'left')">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button mat-button (click)="onEditCardClick()">Edit Card</button>
+      <button mat-icon-button (click)="onDeleteCardClick(card()!.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button (click)="onMoveCardClick(card()!.id, 'right')">
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+}

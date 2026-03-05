@@ -1,0 +1,16 @@
+@if (layout() !== cardLayout.SingleDevice) {
+  <mat-icon class="icon" [class.active]="isActive()" [class.inactive]="!isActive()">{{
+    item()?.icon
+  }}</mat-icon>
+  <div class="label">{{ item()?.label }}</div>
+  <mat-slide-toggle [checked]="isActive()" (change)="toggleDevice()"></mat-slide-toggle>
+} @else {
+  <div class="label">{{ item()?.label }}</div>
+  <mat-icon
+    class="icon"
+    [class.active]="isActive()"
+    [class.inactive]="!isActive()"
+    (click)="toggleDevice()"
+    >{{ item()?.icon }}</mat-icon
+  >
+}
